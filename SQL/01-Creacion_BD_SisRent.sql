@@ -335,6 +335,7 @@ create table Vehiculos (
    Anio                 int                  not null,
    Valor                decimal              not null,
    Patente              nvarchar(7)          not null,
+   RutaImagen           nvarchar(256)        null,
    Observaciones        nvarchar(512)        not null,
    Estado               bit                  not null,
    constraint PK_VEHICULOS primary key (IdVehiculo)

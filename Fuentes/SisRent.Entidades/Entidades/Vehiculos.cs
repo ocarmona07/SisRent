@@ -26,6 +26,9 @@ namespace SisRent.Entidades.Entidades
         [Required]
         [StringLength(7)]
         public string Patente { get; set; }
+        
+        [StringLength(256)]
+        public string RutaImagen { get; set; }
 
         [Required]
         [StringLength(512)]
