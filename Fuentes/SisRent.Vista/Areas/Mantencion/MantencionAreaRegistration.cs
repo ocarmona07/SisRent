@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace SisRent.Vista.Areas.Mantencion
+﻿namespace SisRent.Vista.Areas.Mantencion
 {
+    using System.Web.Mvc;
+
     public class MantencionAreaRegistration : AreaRegistration 
     {
         public override string AreaName 

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using SisRent.Entidades.Common;
-using SisRent.Entidades.Entidades;
-
-namespace SisRent.Entidades.Response
+﻿namespace SisRent.Entidades.Response
 {
+    using System.Collections.Generic;
+    using Common;
+    using Entidades;
+
     public class VehiculosResponse : ResponseBase
     {
         public Vehiculos Vehiculo { get; set; }

@@ -1,8 +1,7 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
-namespace SisRent.Vista
+﻿namespace SisRent.Vista
 {
+    using System.Web.Optimization;
+
     public class BundleConfig
     {
         // Para obtener más información sobre las uniones, visite https://go.microsoft.com/fwlink/?LinkId=301862
@@ -26,6 +25,18 @@ namespace SisRent.Vista
                       "~/Styles/bootstrap.css",
                       "~/Styles/font-awesome.css",
                       "~/Styles/site.css"));
+
+            bundles.Add(new StyleBundle("~/Styles/AdminLTE").Include(
+                      "~/Styles/bootstrap.css",
+                      "~/Styles/font-awesome.css",
+                      "~/Styles/AdminLTE.min.css",
+                      "~/Styles/skins/_all-skins.min.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/AdminLTE").Include(
+                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/jquery-{version}.js",
+                      "~/Scripts/jquery.validate*",
+                      "~/Scripts/adminlte.min.js"));
         }
     }
 }

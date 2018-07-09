@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SisRent.Entidades.Entidades;
-using SisRent.Entidades.Request;
-using SisRent.Entidades.Response;
-
-namespace SisRent.Datos.Admin
+﻿namespace SisRent.Datos.Admin
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Entidades.Entidades;
+    using Entidades.Request;
+    using Entidades.Response;
+
     public class VehiculosDa
     {
         private readonly SisRentModel _sisRentModel;
 
-        public VehiculosDa(SisRentModel sisRentModel)
+        public VehiculosDa()
         {
             if (_sisRentModel == null)
             {
-                _sisRentModel = sisRentModel;
+                _sisRentModel = new SisRentModel();
             }
         }
 
@@ -63,13 +63,78 @@ namespace SisRent.Datos.Admin
         {
             var response = new VehiculosResponse
             {
-                EsValido = true,
-                Vehiculos = new List<Vehiculos>()
+                EsValido = true
             };
             try
             {
-                response.Vehiculos = _sisRentModel.Vehiculos
-                    .Where(o => o.IdVehiculo == request.IdVehiculo).ToList();
+                response.Vehiculo = _sisRentModel.Vehiculos
+                    .FirstOrDefault(o => o.IdVehiculo == request.IdVehiculo);
+            }
+            catch (Exception e)
+            {
+                response.EsValido = false;
+                response.MensajeError = e.GetBaseException().Message;
+            }
+
+            return response;
+        }
+
+        public VehiculosResponse ActualizarVehiculo(VehiculosRequest request)
+        {
+            var response = new VehiculosResponse
+            {
+                EsValido = true
+            };
+            try
+            {
+                var vehiculo = _sisRentModel.Vehiculos
+                    .FirstOrDefault(o => o.IdVehiculo == request.IdVehiculo);
+                if (vehiculo == null)
+                {
+                    response.EsValido = false;
+                    response.MensajeError = "Vehículo no encontrado";
+                }
+                else
+                {
+                    vehiculo.IdModelo = request.Vehiculo.IdModelo;
+                    vehiculo.Anio = request.Vehiculo.Anio;
+                    vehiculo.Valor = request.Vehiculo.Valor;
+                    vehiculo.Patente = request.Vehiculo.Patente;
+                    vehiculo.RutaImagen = request.Vehiculo.RutaImagen;
+                    vehiculo.Observaciones = request.Vehiculo.Observaciones;
+                    vehiculo.Estado = request.Vehiculo.Estado;
+                    _sisRentModel.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                response.EsValido = false;
+                response.MensajeError = e.GetBaseException().Message;
+            }
+
+            return response;
+        }
+
+        public VehiculosResponse EliminarVehiculo(VehiculosRequest request)
+        {
+            var response = new VehiculosResponse
+            {
+                EsValido = true
+            };
+            try
+            {
+                var vehiculo = _sisRentModel.Vehiculos
+                    .FirstOrDefault(o => o.IdVehiculo == request.IdVehiculo);
+                if (vehiculo == null)
+                {
+                    response.EsValido = false;
+                    response.MensajeError = "Vehículo no encontrado";
+                }
+                else
+                {
+                    _sisRentModel.Vehiculos.Remove(vehiculo);
+                    _sisRentModel.SaveChanges();
+                }
             }
             catch (Exception e)
             {

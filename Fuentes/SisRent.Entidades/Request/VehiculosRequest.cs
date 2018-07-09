@@ -1,7 +1,7 @@
-﻿using SisRent.Entidades.Entidades;
-
-namespace SisRent.Entidades.Request
+﻿namespace SisRent.Entidades.Request
 {
+    using Entidades;
+    
     public class VehiculosRequest
     {
         public int IdVehiculo { get; set; }

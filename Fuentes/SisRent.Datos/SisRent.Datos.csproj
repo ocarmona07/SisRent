@@ -50,7 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\ReservasDa.cs" />
+    <Compile Include="Admin\ServiciosDa.cs" />
+    <Compile Include="Admin\UsuariosDa.cs" />
     <Compile Include="Admin\VehiculosDa.cs" />
+    <Compile Include="Common\ListasDa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

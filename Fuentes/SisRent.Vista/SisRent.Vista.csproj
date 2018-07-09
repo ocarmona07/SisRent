@@ -46,6 +46,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -148,8 +154,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Mantencion\Controllers\MantencionController.cs" />
+    <Compile Include="Areas\Mantencion\Controllers\InicioController.cs" />
+    <Compile Include="Areas\Mantencion\Controllers\VehiculosController.cs" />
     <Compile Include="Areas\Mantencion\MantencionAreaRegistration.cs" />
+    <Compile Include="Areas\Mantencion\Models\HeaderViewModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\InicioViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,6 +167,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\fontawesome-webfont.svg" />
+    <Content Include="Images\Aveo_2010.png" />
+    <Content Include="Images\user2-160x160.jpg" />
+    <Content Include="Images\user3-128x128.jpg" />
+    <Content Include="Images\user4-128x128.jpg" />
+    <Content Include="Scripts\adminlte.js" />
+    <Content Include="Scripts\adminlte.min.js" />
+    <Content Include="Styles\AdminLTE.css" />
+    <Content Include="Styles\AdminLTE.min.css" />
     <Content Include="Styles\bootstrap-theme.css" />
     <Content Include="Styles\bootstrap-theme.min.css" />
     <Content Include="Styles\bootstrap.css" />
@@ -169,18 +186,19 @@
     <Content Include="Styles\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Areas\Mantencion\Views\web.config" />
     <Content Include="Areas\Mantencion\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Mantencion\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Mantencion\Views\Mantencion\Index.cshtml" />
     <Content Include="Fonts\fontawesome-webfont.eot" />
     <Content Include="Fonts\fontawesome-webfont.ttf" />
     <Content Include="Fonts\fontawesome-webfont.woff" />
     <Content Include="Fonts\fontawesome-webfont.woff2" />
     <Content Include="Fonts\FontAwesome.otf" />
+    <Content Include="Areas\Mantencion\Views\Vehiculos\Index.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Shared\Partials\Sidebar.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Shared\Partials\Header.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Inicio\Index.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Shared\Partials\ControlSidebar.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -192,6 +210,32 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Styles\skins\skin-black-light.css" />
+    <Content Include="Styles\skins\skin-black-light.min.css" />
+    <Content Include="Styles\skins\skin-black.css" />
+    <Content Include="Styles\skins\skin-black.min.css" />
+    <Content Include="Styles\skins\skin-blue-light.css" />
+    <Content Include="Styles\skins\skin-blue-light.min.css" />
+    <Content Include="Styles\skins\skin-blue.css" />
+    <Content Include="Styles\skins\skin-blue.min.css" />
+    <Content Include="Styles\skins\skin-green-light.css" />
+    <Content Include="Styles\skins\skin-green-light.min.css" />
+    <Content Include="Styles\skins\skin-green.css" />
+    <Content Include="Styles\skins\skin-green.min.css" />
+    <Content Include="Styles\skins\skin-purple-light.css" />
+    <Content Include="Styles\skins\skin-purple-light.min.css" />
+    <Content Include="Styles\skins\skin-purple.css" />
+    <Content Include="Styles\skins\skin-purple.min.css" />
+    <Content Include="Styles\skins\skin-red-light.css" />
+    <Content Include="Styles\skins\skin-red-light.min.css" />
+    <Content Include="Styles\skins\skin-red.css" />
+    <Content Include="Styles\skins\skin-red.min.css" />
+    <Content Include="Styles\skins\skin-yellow-light.css" />
+    <Content Include="Styles\skins\skin-yellow-light.min.css" />
+    <Content Include="Styles\skins\skin-yellow.css" />
+    <Content Include="Styles\skins\skin-yellow.min.css" />
+    <Content Include="Styles\skins\_all-skins.css" />
+    <Content Include="Styles\skins\_all-skins.min.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -209,7 +253,6 @@
     <Content Include="Views\Home\Rent.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Mantencion\Models\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
