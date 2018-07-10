@@ -1,7 +1,128 @@
-﻿@{
+﻿@model SisRent.Vista.Areas.Mantencion.Models.VehiculosViewModel
+@{
     ViewBag.Title = "Vehículos";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
+<section class="content-header">
+    <h1>
+        Vehículos
+        <small>Lista de vehículos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Vehículos</li>
+        <li class="active">Lista de vehículos</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de vehículos</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 130px">Imagen</th>
+                        <th>Marca - Modelo</th>
+                        <th>Año</th>
+                        <th>Patente</th>
+                        <th>Detalles</th>
+                        <th>Valor</th>
+                        <th style="width: 200px">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaVehiculos != null && Model.ListaVehiculos.Any())
+                    {
+                        foreach (var vehiculo in Model.ListaVehiculos)
+                        {
+                            <tr>
+                                <td><img class="img-responsive" src="@(urlBase + vehiculo.RutaImagen)" alt="Imagen Auto"></td>
+                                <td>@vehiculo.VehModelos.VehMarcas.Marca - @vehiculo.VehModelos.Modelo</td>
+                                <td>@vehiculo.Anio</td>
+                                <td>@vehiculo.Patente</td>
+                                <td>@vehiculo.Observaciones</td>
+                                <td>$ @vehiculo.Valor.ToString("N0")</td>
+                                <td>
+                                    <button class="btn btn-warning btnEditar" title="Editar" data-id="@vehiculo.IdVehiculo"><i class="fa fa-edit"></i></button>
+                                    <button class="btn @("btn-" + (vehiculo.Estado ? "success" : "danger")) btnEstado" title="@(vehiculo.Estado ? "Activado" : "Desactivado")" data-id="@vehiculo.IdVehiculo">
+                                        <i class="fa @("fa-" + (vehiculo.Estado ? "check" : "times"))"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="7">No hay vehículos registrados</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <div class="pull-right">
+                <a href="@(urlBase + Url.Action("AgregarVehiculo"))" class="btn btn-success"><i class="fa fa-ambulance"></i> Agregar Vehículo</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-editar" aria-keyboard="disable">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Vehículo</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body…</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts
+{
+    <script>
+        $(document).on("click", ".btnEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerVehiculo", "Vehiculos", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idVehiculo: $(this).attr("data-id")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar .modal-body p").html(JSON.stringify(response.vehiculo));
+                        $("#modal-editar").modal("show");
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                }
+            });
+        });
 
-<h2>Index</h2>
-
-<p>Error: @ViewBag.MensajeError</p>
+        $(document).on("click", ".btnEstado", function() {
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Vehiculos", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idVehiculo: $(this).attr("data-id"),
+                    estado: !$(this).find("i").hasClass("fa-check")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        window.location.href = '@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })';
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,9 +1,17 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.InicioViewModel
 @{
     ViewBag.Title = "Inicio";
-    ViewBag.HeaderViewModel = Model.Header;
 }
-
-<h2>Dashboard</h2>
-
-@Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantencion" }, new { })
+<section class="content-header">
+    <h1>
+        Inicio
+        <small>Panel de control</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li class="active">Inicio</li>
+    </ol>
+</section>
+<section class="content">
+    @Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantencion" }, new { })
+</section>

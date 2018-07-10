@@ -1,5 +1,11 @@
 ﻿@using SisRent.Vista.Areas.Mantencion.Models
 @{
+    //Validar Inicio
+    if (Session["HeaderViewModel"] == null)
+    {
+        Response.Redirect(Url.Action("Index", "Inicio", new { area = "Mantencion" }));
+    }
+
     // Preconfigs
     const string colorSkin = "green";
 }
@@ -17,21 +23,9 @@
 <body class="hold-transition skin-@colorSkin sidebar-mini">
     <div class="wrapper">
         @Html.Partial("Partials/Header", (HeaderViewModel)Session["HeaderViewModel"])
-        @Html.Partial("Partials/Sidebar")
+        @Html.Partial("Partials/Sidebar", (SidebarViewModel)Session["SidebarViewModel"])
         <div class="content-wrapper">
-            <section class="content-header">
-                <h1>
-                    Dashboard
-                    <small>Control panel</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li class="active">Dashboard</li>
-                </ol>
-            </section>
-            <section class="content">
-                @RenderBody()
-            </section>
+            @RenderBody()
         </div>
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
@@ -40,7 +34,6 @@
             <strong>Copyright &copy; 2014-@DateTime.Now.Year <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
             reserved.
         </footer>
-        @*Html.Partial("Partials/ControlSidebar")*@
     </div>
     @Scripts.Render("~/Scripts/AdminLTE")
     @RenderSection("Scripts", required: false)

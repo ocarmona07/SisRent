@@ -1,4 +1,6 @@
-﻿namespace SisRent.Negocio.Admin
+﻿using System.Linq;
+
+namespace SisRent.Negocio.Admin
 {
     using Datos.Admin;
     using Entidades.Request;
@@ -19,6 +21,15 @@
         public UsuariosResponse ObtenerUsuario(UsuariosRequest request)
         {
             return new UsuariosDa().ObtenerUsuario(request);
+        }
+
+        public UsuariosResponse ObtenerUsuarioPorRut(UsuariosRequest request)
+        {
+            var usuarios = new UsuariosDa().ObtenerUsuarios();
+            if (!usuarios.EsValido) return null;
+            usuarios.Usuario =
+                usuarios.Usuarios.FirstOrDefault(o => request.RutUsuario.Equals(o.Rut));
+            return usuarios;
         }
 
         public UsuariosResponse ActualizarUsuario(UsuariosRequest request)

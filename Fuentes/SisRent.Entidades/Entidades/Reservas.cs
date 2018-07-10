@@ -3,8 +3,6 @@ namespace SisRent.Entidades.Entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class Reservas
     {
@@ -25,7 +23,7 @@ namespace SisRent.Entidades.Entidades
 
         public DateTime? FechaEntrega { get; set; }
 
-        public int? IdVehiculo { get; set; }
+        public int IdVehiculo { get; set; }
 
         [Required]
         [StringLength(32)]
@@ -49,9 +47,11 @@ namespace SisRent.Entidades.Entidades
         [StringLength(10)]
         public string Telefono { get; set; }
 
-        public int? IdEstado { get; set; }
+        public int IdEstado { get; set; }
 
-        public int? IdUsuario { get; set; }
+        public decimal ValorFinal { get; set; }
+
+        public int IdUsuario { get; set; }
 
         [StringLength(512)]
         public string Observaciones { get; set; }

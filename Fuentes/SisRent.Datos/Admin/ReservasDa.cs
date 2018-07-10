@@ -88,7 +88,7 @@
             try
             {
                 var reserva = _sisRentModel.Reservas
-                    .FirstOrDefault(o => o.IdReserva == request.IdReserva);
+                    .FirstOrDefault(o => o.IdReserva == request.Reserva.IdReserva);
                 if (reserva == null)
                 {
                     response.EsValido = false;

@@ -88,7 +88,7 @@
             try
             {
                 var usuario = _sisRentModel.Usuarios
-                    .FirstOrDefault(o => o.IdUsuario == request.IdUsuario);
+                    .FirstOrDefault(o => o.IdUsuario == request.Usuario.IdUsuario);
                 if (usuario == null)
                 {
                     response.EsValido = false;
@@ -101,6 +101,7 @@
                     usuario.ApMaterno = request.Usuario.ApMaterno;
                     usuario.Telefono = request.Usuario.Telefono;
                     usuario.Email = request.Usuario.Email;
+                    usuario.RutaImagen = request.Usuario.RutaImagen;
                     usuario.IdRol = request.Usuario.IdRol;
                     usuario.Clave = request.Usuario.Clave;
                     usuario.Estado = request.Usuario.Estado;

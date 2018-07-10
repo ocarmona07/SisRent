@@ -5,7 +5,7 @@ namespace SisRent.Entidades.Entidades
     public partial class SisRentModel : DbContext
     {
         public SisRentModel()
-            : base("name=SisRentEntityModel")
+            : base("name=SisRentEntities")
         {
         }
 
@@ -24,6 +24,11 @@ namespace SisRent.Entidades.Entidades
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Accesos>()
+                .HasMany(e => e.Accesos1)
+                .WithOptional(e => e.Accesos2)
+                .HasForeignKey(e => e.IdAccesoPadre);
+
             modelBuilder.Entity<Comunas>()
                 .HasMany(e => e.Reservas)
                 .WithRequired(e => e.Comunas)
@@ -40,13 +45,46 @@ namespace SisRent.Entidades.Entidades
                 .WithOptional(e => e.Comunas2)
                 .HasForeignKey(e => e.IdComuna);
 
+            modelBuilder.Entity<Estados>()
+                .HasMany(e => e.Reservas)
+                .WithRequired(e => e.Estados)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Reservas>()
+                .Property(e => e.ValorFinal)
+                .HasPrecision(18, 0);
+
+            modelBuilder.Entity<Reservas>()
+                .HasMany(e => e.ReservaServicio)
+                .WithRequired(e => e.Reservas)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ReservaServicio>()
+                .Property(e => e.ValorServicio)
+                .HasPrecision(18, 0);
+
             modelBuilder.Entity<Servicios>()
                 .Property(e => e.Valor)
                 .HasPrecision(18, 0);
 
+            modelBuilder.Entity<Servicios>()
+                .HasMany(e => e.ReservaServicio)
+                .WithRequired(e => e.Servicios)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Usuarios>()
+                .HasMany(e => e.Reservas)
+                .WithRequired(e => e.Usuarios)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Vehiculos>()
                 .Property(e => e.Valor)
                 .HasPrecision(18, 0);
+
+            modelBuilder.Entity<Vehiculos>()
+                .HasMany(e => e.Reservas)
+                .WithRequired(e => e.Vehiculos)
+                .WillCascadeOnDelete(false);
         }
     }
 }

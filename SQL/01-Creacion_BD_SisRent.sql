@@ -10,6 +10,13 @@ go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('Accesos') and o.name = 'FK_ACCESOS_REFERENCE_ACCESOS')
+alter table Accesos
+   drop constraint FK_ACCESOS_REFERENCE_ACCESOS
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('ReservaServicio') and o.name = 'FK_RESERVAS_REFERENCE_RESERVAS')
 alter table ReservaServicio
    drop constraint FK_RESERVAS_REFERENCE_RESERVAS
@@ -188,6 +195,7 @@ go
 /*==============================================================*/
 create table Accesos (
    IdAcceso             int                  not null,
+   IdAccesoPadre        int                  null,
    Acceso               nvarchar(32)         not null,
    Descripcion          nvarchar(64)         null,
    Icono                nvarchar(24)         null,
@@ -222,8 +230,9 @@ go
 /*==============================================================*/
 create table ReservaServicio (
    IdReservaServicio    int                  identity,
-   IdReserva            int                  null,
-   IdServicio           int                  null,
+   IdReserva            int                  not null,
+   IdServicio           int                  not null,
+   ValorServicio        decimal              not null,
    constraint PK_RESERVASERVICIO primary key (IdReservaServicio)
 )
 go
@@ -237,15 +246,16 @@ create table Reservas (
    FechaRetiro          datetime             not null,
    IdComunaEntrega      int                  null,
    FechaEntrega         datetime             null,
-   IdVehiculo           int                  null,
+   IdVehiculo           int                  not null,
    Nombres              nvarchar(32)         not null,
    Apellidos            nvarchar(32)         not null,
    Email                nvarchar(64)         not null,
    Direccion            nvarchar(128)        not null,
    IdComuna             int                  null,
    Telefono             nvarchar(10)         not null,
-   IdEstado             int                  null,
-   IdUsuario            int                  null,
+   IdEstado             int                  not null,
+   ValorFinal           decimal              not null,
+   IdUsuario            int                  not null,
    Observaciones        nvarchar(512)        null,
    constraint PK_RESERVAS primary key (IdReserva)
 )
@@ -298,6 +308,7 @@ create table Usuarios (
    ApMaterno            nvarchar(32)         null,
    Telefono             nvarchar(10)         null,
    Email                nvarchar(64)         null,
+   RutaImagen           nvarchar(256)        null,
    IdRol                int                  null,
    Clave                nvarchar(16)         not null,
    Estado               bit                  not null,
@@ -340,6 +351,11 @@ create table Vehiculos (
    Estado               bit                  not null,
    constraint PK_VEHICULOS primary key (IdVehiculo)
 )
+go
+
+alter table Accesos
+   add constraint FK_ACCESOS_REFERENCE_ACCESOS foreign key (IdAccesoPadre)
+      references Accesos (IdAcceso)
 go
 
 alter table ReservaServicio

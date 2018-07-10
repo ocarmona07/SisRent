@@ -2,11 +2,15 @@ USE SisRent
 GO
 
 INSERT  INTO Accesos
-        ( IdAcceso, Acceso, Descripcion, Icono, UrlAcceso )
-VALUES  ( 1, 'Lista de reservas', 'Listado de las reservas realizadas', 'map', '/Reservas/ListaReservas' ),
-        ( 2, 'Crear reserva', 'Crear/Editar reserva', 'map-marked', '/Reservas/CrearReserva' ),
-        ( 3, 'Lista de vehículos', 'Listado de vehículos', 'parking', '/Vehiculos/ListaVehiculos' ),
-        ( 4, 'Agregar vehículo', 'Agregar/Editar vehículo', 'car', '/Vehiculos/AgregarVehiculo' ),
-        ( 5, 'Lista de servicios', 'Listado de servicios', 'shopping-cart', '/Servicios/ListaServicios' ),
-        ( 6, 'Agregar servicio', 'Agregar/Editar servicio', 'cart-plus', '/Servicios/AgregarServicio' )
+        ( IdAcceso, IdAccesoPadre, Acceso, Descripcion, Icono, UrlAcceso )
+VALUES  ( 1, NULL, 'Inicio', 'Inicio', 'th', N'/Mantencion/Inicio' ),
+        ( 2, NULL, 'Reservas', 'Reservas', 'circle-o text-red', N'#' ),
+        ( 3, 2, 'Lista de reservas', 'Listado de las reservas realizadas', 'map', N'/Mantencion/Reservas' ),
+        ( 4, 2, 'Crear reserva', 'Crear/Editar reserva', 'map-marker', N'/Mantencion/Reservas/CrearReserva' ),
+        ( 5, NULL, 'Vehículos', 'Vehículos', 'circle-o text-aqua', N'#' ),
+        ( 6, 5, 'Lista de vehículos', 'Listado de vehículos', 'car', N'/Mantencion/Vehiculos' ),
+        ( 7, 5, 'Agregar vehículo', 'Agregar/Editar vehículo', 'ambulance', N'/Mantencion/Vehiculos/AgregarVehiculo' ),
+        ( 8, NULL, 'Servicios', 'Servicios', 'circle-o text-green', N'#' ),
+        ( 9, 8, 'Lista de servicios', 'Listado de servicios', 'shopping-cart', N'/Mantencion/Servicios' ),
+        ( 10, 8, 'Agregar servicio', 'Agregar/Editar servicio', 'cart-plus', N'/Mantencion/Servicios/AgregarServicio' )
 GO

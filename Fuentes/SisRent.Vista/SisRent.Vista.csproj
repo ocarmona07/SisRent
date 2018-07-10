@@ -155,8 +155,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Mantencion\Controllers\InicioController.cs" />
+    <Compile Include="Areas\Mantencion\Controllers\ReservasController.cs" />
+    <Compile Include="Areas\Mantencion\Controllers\ServiciosController.cs" />
     <Compile Include="Areas\Mantencion\Controllers\VehiculosController.cs" />
     <Compile Include="Areas\Mantencion\MantencionAreaRegistration.cs" />
+    <Compile Include="Areas\Mantencion\Models\VehiculoModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\VehiculosViewModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\SidebarViewModel.cs" />
     <Compile Include="Areas\Mantencion\Models\HeaderViewModel.cs" />
     <Compile Include="Areas\Mantencion\Models\InicioViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -199,6 +204,11 @@
     <Content Include="Areas\Mantencion\Views\Shared\Partials\Header.cshtml" />
     <Content Include="Areas\Mantencion\Views\Inicio\Index.cshtml" />
     <Content Include="Areas\Mantencion\Views\Shared\Partials\ControlSidebar.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Reservas\Index.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Servicios\Index.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Reservas\CrearReserva.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Vehiculos\AgregarVehiculo.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Servicios\AgregarServicio.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -5,5 +5,6 @@
         public string Algo { get; set; }
 
         public HeaderViewModel Header { get; set; }
+        public SidebarViewModel Sidebar { get; set; }
     }
 }

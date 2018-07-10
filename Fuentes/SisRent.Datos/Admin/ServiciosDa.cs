@@ -88,7 +88,7 @@
             try
             {
                 var servicio = _sisRentModel.Servicios
-                    .FirstOrDefault(o => o.IdServicio == request.IdServicio);
+                    .FirstOrDefault(o => o.IdServicio == request.Servicio.IdServicio);
                 if (servicio == null)
                 {
                     response.EsValido = false;

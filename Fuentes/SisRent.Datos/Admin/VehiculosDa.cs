@@ -88,7 +88,7 @@
             try
             {
                 var vehiculo = _sisRentModel.Vehiculos
-                    .FirstOrDefault(o => o.IdVehiculo == request.IdVehiculo);
+                    .FirstOrDefault(o => o.IdVehiculo == request.Vehiculo.IdVehiculo);
                 if (vehiculo == null)
                 {
                     response.EsValido = false;

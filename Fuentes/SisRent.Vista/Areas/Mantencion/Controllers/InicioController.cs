@@ -3,7 +3,10 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Mvc;
+    using Entidades.Request;
     using Models;
+    using Negocio.Admin;
+    using Negocio.Common;
 
     public class InicioController : Controller
     {
@@ -15,18 +18,31 @@
             var notif = new Dictionary<string, string>();
             //notif.Add("users|aqua", "Texto de prueba");
             //notif.Add("warning|yellow", "Notificación de prueba");
+            var usuario = new UsuariosBo().ObtenerUsuarioPorRut(new UsuariosRequest
+            {
+                RutUsuario = "159888207"
+            }).Usuario;
 
             var header = new HeaderViewModel
             {
-                NombreUsuario = "Omar Carmona",
-                NombreCompletoUsuario = "Omar Carmona Rivas",
-                ImagenUsuario = _urlBase + "/Images/user2-160x160.jpg",
-                Rol = "Administrador",
+                NombreUsuario = usuario.Nombres + " " + usuario.ApPaterno,
+                NombreCompletoUsuario = usuario.Nombres + " " + usuario.ApPaterno +
+                                        " " + usuario.ApMaterno,
+                ImagenUsuario = _urlBase + usuario.RutaImagen,
+                Rol = usuario.Roles.Rol,
                 Notificaciones = notif
             };
+
+            var sidebar = new SidebarViewModel
+            {
+                ListaAccesos = new ListasBo().ObtenerAccesos().Accesos
+            };
+            Session["SidebarViewModel"] = sidebar;
+
             var model = new InicioViewModel
             {
-                Header = header
+                Header = header,
+                Sidebar = sidebar
             };
             Session["HeaderViewModel"] = header;
 

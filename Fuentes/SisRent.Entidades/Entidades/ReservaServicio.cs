@@ -1,10 +1,7 @@
 namespace SisRent.Entidades.Entidades
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("ReservaServicio")]
     public partial class ReservaServicio
@@ -12,9 +9,11 @@ namespace SisRent.Entidades.Entidades
         [Key]
         public int IdReservaServicio { get; set; }
 
-        public int? IdReserva { get; set; }
+        public int IdReserva { get; set; }
 
-        public int? IdServicio { get; set; }
+        public int IdServicio { get; set; }
+
+        public decimal ValorServicio { get; set; }
 
         public virtual Reservas Reservas { get; set; }
 
