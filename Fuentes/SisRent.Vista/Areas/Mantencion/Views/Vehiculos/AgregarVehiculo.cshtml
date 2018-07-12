@@ -1,7 +1,169 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.VehiculosViewModel
 @{
-    ViewBag.Title = "AgregarVehiculo";
+    ViewBag.Title = "Agregar Vehículo";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
+<section class="content-header">
+    <h1>
+        Vehículos
+        <small>Agregar vehículo</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Vehículos</li>
+        <li class="active">Agregar vehículo</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Crear vehículo</h3>
+        </div>
+        <div class="box-body">
+            <form id="frmEditar" role="form" method="post" action="@Url.Action("CrearVehiculo", "Vehiculos", new {area = "Mantencion"})">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ddlMarca">Marca</label>
+                                    <select class="form-control select2" name="ddlMarca" id="ddlMarca">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach (var item in Model.ListaMarcas)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ddlModelo">Modelo</label>
+                                    <select class="form-control select2" name="ddlModelo" id="ddlModelo">
+                                        <option value="">Seleccionar...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ddlAnio">Año</label>
+                                    <select class="form-control select2" name="ddlAnio" id="ddlAnio">
+                                        <option value="">Seleccionar...</option>
+                                        @for (var an = 2000; an <= DateTime.Now.Year; an++)
+                                        {
+                                            <option value="@an">@an</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tbPatente">Patente</label>
+                                    <input type="text" class="form-control" name="tbPatente" id="tbPatente" placeholder="AB1234" maxlength="6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tbValor">Valor</label>
+                                    <input type="number" class="form-control" name="tbValor" id="tbValor" placeholder="20000">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="checkbox" style="margin-top: 32px;">
+                                        <label>
+                                            <input type="checkbox" name="chkEstado" id="chkEstado">
+                                            Activo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="tbDetalles">Detalles</label>
+                                    <textarea class="form-control" name="tbDetalles" id="tbDetalles" rows="4" placeholder="5 puertas, frenos ABS..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="btnCambiarImagen">Imagen</label>
+                            <div><img class="img-responsive" src="@(urlBase + "/Images/SinImagen.png")" alt="Imagen Auto"></div>
+                            <input type="file" name="btnCambiarImagen" id="btnCambiarImagen" style="width: 100%;" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="box-footer">
+            <button type="button" id="btnCrear" class="btn btn-success pull-right">Crear Vehículo</button>
+        </div>
+    </div>
+</section>
+@section Styles
+{
+    @Styles.Render("~/Styles/select2")
+}
+@section Scripts
+{
+    @Scripts.Render("~/Scripts/select2")
+    <script>
+        $(document).ready(function() {
+            $(".select2").select2();
+        });
 
-<h2>AgregarVehiculo</h2>
+        $(document).on("change", "#ddlMarca", function() {
+            $("#ddlModelo").html('<option value="">Seleccionar...</option>');
+            if ($(this).val() !== "") {
+                $.ajax({
+                    url: '@Url.Action("ObtenerModelos", "Vehiculos", new { area = "Mantencion" })',
+                    type: 'POST',
+                    data: {
+                        idMarca: $(this).val()
+                    },
+                    success: function(response) {
+                        if (response.valid) {
+                            $.each(response.modelos, function(i, val) {
+                                $("#ddlModelo").append('<option value="' + val.Value + '">' + val.Text + '</option>');
+                            });
+                            $("#ddlModelo").val("").trigger('change');
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    }
+                });
+            }
+        });
 
+        $(document).on("click", "#btnCrear", function() {
+            $.ajax({
+                url: '@Url.Action("CrearVehiculo", "Vehiculos", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idModelo: $("#ddlModelo").val(),
+                    anio: $("#ddlAnio").val(),
+                    valor: $("#tbValor").val(),
+                    patente: $("#tbPatente").val(),
+                    rutaImagen: $("#btnCambiarImagen").val(),
+                    observaciones: $("#tbDetalles").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar").modal("hide");
+                        alert("Vehículo Creado!");
+                        window.location.href = '@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })';
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                }
+            });
+        });
+    </script>
+}

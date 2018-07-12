@@ -8,5 +8,5 @@ GO
 
 INSERT  INTO Vehiculos
         ( IdModelo, Anio, Valor, Patente, RutaImagen, Observaciones, Estado )
-VALUES  ( 138, 2010, 22000, 'ABCD12', '/Images/Aveo_2010.png', '5 Puertas, Frenos ABS, Cierre centralizado', 1 )
+VALUES  ( 138, 2010, 22000, 'ABCD12', '/Images/Aveo_2010_ABCD12.png', '5 Puertas, Frenos ABS, Cierre centralizado', 1 )
 GO

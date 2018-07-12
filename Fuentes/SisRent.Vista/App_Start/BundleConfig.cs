@@ -37,6 +37,12 @@
                       "~/Scripts/jquery-{version}.js",
                       "~/Scripts/jquery.validate*",
                       "~/Scripts/adminlte.min.js"));
+
+            bundles.Add(new StyleBundle("~/Styles/select2").Include(
+                      "~/Styles/select2.min.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/select2").Include(
+                      "~/Scripts/select2.full.min.js"));
         }
     }
 }

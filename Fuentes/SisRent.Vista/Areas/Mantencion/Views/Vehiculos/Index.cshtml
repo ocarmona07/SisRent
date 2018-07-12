@@ -39,7 +39,7 @@
                         {
                             <tr>
                                 <td><img class="img-responsive" src="@(urlBase + vehiculo.RutaImagen)" alt="Imagen Auto"></td>
-                                <td>@vehiculo.VehModelos.VehMarcas.Marca - @vehiculo.VehModelos.Modelo</td>
+                                <td>@vehiculo.Marca - @vehiculo.Modelo</td>
                                 <td>@vehiculo.Anio</td>
                                 <td>@vehiculo.Patente</td>
                                 <td>@vehiculo.Observaciones</td>
@@ -75,20 +75,101 @@
                     </button>
                     <h4 class="modal-title">Editar Vehículo</h4>
                 </div>
-                <div class="modal-body">
-                    <p>One fine body…</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
-                </div>
+                <form id="frmEditar" role="form" method="post" action="@Url.Action("ActualizarVehiculo", "Vehiculos", new {area = "Mantencion"})">
+                    <input type="hidden" id="idVehiculo" name="idVehiculo" value="" />
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ddlMarca">Marca</label>
+                                            <select class="form-control select2" name="ddlMarca" id="ddlMarca">
+                                                <option value="">Seleccionar...</option>
+                                                @foreach (var item in Model.ListaMarcas)
+                                                {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ddlModelo">Modelo</label>
+                                            <select class="form-control select2" name="idModelo" id="ddlModelo">
+                                                <option value="">Seleccionar...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ddlAnio">Año</label>
+                                            <select class="form-control select2" name="anio" id="ddlAnio">
+                                                <option value="">Seleccionar...</option>
+                                                @for (var an = 2000; an <= DateTime.Now.Year; an++)
+                                                {
+                                                    <option value="@an">@an</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tbPatente">Patente</label>
+                                            <input type="text" class="form-control" name="patente" id="tbPatente" placeholder="AB1234" maxlength="6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="tbValor">Valor</label>
+                                            <input type="number" class="form-control" name="valor" id="tbValor" placeholder="20000" maxlength="8">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="tbDetalles">Detalles</label>
+                                            <textarea class="form-control" name="observaciones" id="tbDetalles" rows="3" placeholder="5 puertas, frenos ABS..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="btnCambiarImagen">Imagen</label>
+                                    <div><img class="img-responsive" id="imgAuto" src="@(urlBase + "/Images/SinImagen.png")" alt="Imagen Auto"></div>
+                                    <input type="file" name="rutaImagen" id="btnCambiarImagen" style="width: 100%;">
+                                    <p class="help-block">Puede cambiar la imagen actual</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="btnGuardarEditar" class="btn btn-success">Guardar cambios</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
+@section Styles
+{
+    @Styles.Render("~/Styles/select2")
+}
 @section Scripts
 {
+    @Scripts.Render("~/Scripts/select2")
     <script>
+        $(document).ready(function() {
+            $(".select2").select2();
+        });
+
         $(document).on("click", ".btnEditar", function () {
             $.ajax({
                 url: '@Url.Action("ObtenerVehiculo", "Vehiculos", new { area = "Mantencion" })',
@@ -98,8 +179,85 @@
                 },
                 success: function(response) {
                     if (response.valid) {
-                        $("#modal-editar .modal-body p").html(JSON.stringify(response.vehiculo));
-                        $("#modal-editar").modal("show");
+                        var idMarca = response.vehiculo.IdMarca;
+                        var idModelo = response.vehiculo.IdModelo;
+                        $("#idVehiculo").val(response.vehiculo.IdVehiculo);
+                        $("#ddlMarca").val(idMarca).trigger('change');
+                        $("#ddlAnio").val(response.vehiculo.Anio).trigger('change');
+
+                        $("#imgAuto").attr('src', '@urlBase' + response.vehiculo.RutaImagen);
+                        $("#tbPatente").val(response.vehiculo.Patente);
+                        $("#tbValor").val(response.vehiculo.Valor);
+                        $("#tbDetalles").val(response.vehiculo.Observaciones);
+
+                        $.ajax({
+                            url: '@Url.Action("ObtenerModelos", "Vehiculos", new { area = "Mantencion" })',
+                            type: 'POST',
+                            data: {
+                                idMarca: idMarca
+                            },
+                            success: function(response) {
+                                if (response.valid) {
+                                    $("#ddlModelo").html('<option value="">Seleccionar...</option>');
+                                    $.each(response.modelos, function(i, val) {
+                                        $("#ddlModelo").append('<option value="' + val.Value + '">' + val.Text + '</option>');
+                                    });
+                                    $("#ddlModelo").val(idModelo).trigger('change');
+
+                                    $("#modal-editar").modal("show");
+                                } else {
+                                    alert("Error: " + response.message);
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                }
+            });
+        });
+
+        $(document).on("change", "#ddlMarca", function() {
+            $("#ddlModelo").html('<option value="">Seleccionar...</option>');
+            if ($(this).val() !== "") {
+                $.ajax({
+                    url: '@Url.Action("ObtenerModelos", "Vehiculos", new { area = "Mantencion" })',
+                    type: 'POST',
+                    data: {
+                        idMarca: $(this).val()
+                    },
+                    success: function(response) {
+                        if (response.valid) {
+                            $.each(response.modelos, function(i, val) {
+                                $("#ddlModelo").append('<option value="' + val.Value + '">' + val.Text + '</option>');
+                            });
+                            $("#ddlModelo").val("").trigger('change');
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    }
+                });
+            }
+        });
+
+        $(document).on("click", "#btnGuardarEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ActualizarVehiculo", "Vehiculos", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idVehiculo: $("#idVehiculo").val(),
+                    idModelo: $("#ddlModelo").val(),
+                    anio: $("#ddlAnio").val(),
+                    valor: $("#tbValor").val(),
+                    patente: $("#tbPatente").val(),
+                    rutaImagen: $("#btnCambiarImagen").val(),
+                    observaciones: $("#tbDetalles").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar").modal("hide");
+                        alert("Vehículo actualizado!");
+                        window.location.href = '@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })';
                     } else {
                         alert("Error: " + response.message);
                     }
