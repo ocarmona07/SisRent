@@ -29,6 +29,7 @@
             {
                 _sisRentModel.Reservas.Add(request.Reserva);
                 _sisRentModel.SaveChanges();
+                response.Reserva = request.Reserva;
             }
             catch (Exception e)
             {

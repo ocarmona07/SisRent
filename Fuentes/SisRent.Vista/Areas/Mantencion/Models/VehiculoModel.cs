@@ -14,7 +14,7 @@
         public decimal Valor { get; set; }
         public string Patente { get; set; }
         public string RutaImagen { get; set; }
-        public string Observaciones { get; set; }
+        public string Detalles { get; set; }
         public bool Estado { get; set; }
     }
 }

@@ -18,8 +18,6 @@ namespace SisRent.Entidades.Entidades
 
         public int Anio { get; set; }
 
-        public decimal Valor { get; set; }
-
         [Required]
         [StringLength(7)]
         public string Patente { get; set; }
@@ -28,8 +26,9 @@ namespace SisRent.Entidades.Entidades
         public string RutaImagen { get; set; }
 
         [Required]
-        [StringLength(512)]
-        public string Observaciones { get; set; }
+        public string Detalles { get; set; }
+
+        public decimal Valor { get; set; }
 
         public bool Estado { get; set; }
 

@@ -29,6 +29,7 @@
             {
                 _sisRentModel.Vehiculos.Add(request.Vehiculo);
                 _sisRentModel.SaveChanges();
+                response.Vehiculo = request.Vehiculo;
             }
             catch (Exception e)
             {
@@ -98,10 +99,10 @@
                 {
                     vehiculo.IdModelo = request.Vehiculo.IdModelo;
                     vehiculo.Anio = request.Vehiculo.Anio;
-                    vehiculo.Valor = request.Vehiculo.Valor;
                     vehiculo.Patente = request.Vehiculo.Patente;
                     vehiculo.RutaImagen = request.Vehiculo.RutaImagen;
-                    vehiculo.Observaciones = request.Vehiculo.Observaciones;
+                    vehiculo.Detalles = request.Vehiculo.Detalles;
+                    vehiculo.Valor = request.Vehiculo.Valor;
                     vehiculo.Estado = request.Vehiculo.Estado;
                     _sisRentModel.SaveChanges();
                 }

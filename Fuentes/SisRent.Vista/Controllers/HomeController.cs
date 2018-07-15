@@ -1,6 +1,7 @@
 ﻿namespace SisRent.Vista.Controllers
 {
     using System.Web.Mvc;
+    using Models;
 
     public class HomeController : Controller
     {
@@ -9,23 +10,29 @@
             return View();
         }
 
-        public ActionResult Rent()
+        public ActionResult Rentar()
         {
-            ViewBag.Message = "Rentar Auto";
+            var vmmhAdmin = new Areas.Mantencion.Models.ViewModelMapperHelper();
+            var model = new RentarViewModel
+            {
+                ListaComunas = new ViewModelMapperHelper().ListaComunas(),
+                ListaServicios = vmmhAdmin.ListaServicios(),
+                ListaVehiculos = vmmhAdmin.ListaVehiculos()
+            };
 
-            return View();
+            return View(model);
         }
 
-        public ActionResult About()
+        public ActionResult Informacion()
         {
             ViewBag.Message = "Información";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Contacto()
         {
-            ViewBag.Message = "Contacto.";
+            ViewBag.Message = "Contacto";
 
             return View();
         }

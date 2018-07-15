@@ -1,7 +1,94 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.ServiciosViewModel
 @{
-    ViewBag.Title = "AgregarServicio";
+    ViewBag.Title = "Agregar Servicio";
 }
-
-<h2>AgregarServicio</h2>
-
+<section class="content-header">
+    <h1>
+        Servicios
+        <small>Agregar servicio</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Servicios</li>
+        <li class="active">Agregar servicio</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Crear servicio</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="tbServicio">Servicio</label>
+                        <input type="text" class="form-control" name="servicio" id="tbServicio" placeholder="Silla para bebé" maxlength="32">
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="tbValor">Valor</label>
+                        <input type="number" class="form-control" name="valor" id="tbValor" placeholder="12300" min="0" max="10000000">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="checkbox" style="margin-top: 32px;">
+                            <label>
+                                <input type="checkbox" name="chkEstado" id="chkEstado">
+                                Activo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbDescripcion">Descripción</label>
+                                <textarea class="form-control" name="descripcion" id="tbDescripcion" rows="3" placeholder="Marca Infanty..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" id="btnCrear" class="btn btn-success pull-right">Crear Servicio</button>
+                </div>
+            </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+</section>
+@section Scripts
+{
+    <script>
+        $(document).on("click", "#btnCrear", function() {
+            $.ajax({
+                url: '@Url.Action("CrearServicio", "Servicios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    nombre: $("#tbServicio").val(),
+                    valor: $("#tbValor").val(),
+                    descripcion: $("#tbDescripcion").val(),
+                    estado: $("#chkEstado").prop("checked")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-alerta .modal-body p").text("Servicio agregado correctamente");
+                        $("#modal-alerta .modal-content button").click(function () {
+                            window.location.href = '@Url.Action("Index", "Servicios", new { area = "Mantencion" })';
+                        });
+                        $("#modal-alerta").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text("No se pudo crear el servicio");
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function(a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+    </script>
+}

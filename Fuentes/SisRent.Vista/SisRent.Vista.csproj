@@ -157,9 +157,12 @@
     <Compile Include="Areas\Mantencion\Controllers\InicioController.cs" />
     <Compile Include="Areas\Mantencion\Controllers\ReservasController.cs" />
     <Compile Include="Areas\Mantencion\Controllers\ServiciosController.cs" />
+    <Compile Include="Areas\Mantencion\Controllers\UsuariosController.cs" />
     <Compile Include="Areas\Mantencion\Controllers\VehiculosController.cs" />
     <Compile Include="Areas\Mantencion\MantencionAreaRegistration.cs" />
-    <Compile Include="Areas\Mantencion\Models\ComboModel.cs" />
+    <Compile Include="Models\ComboModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\ServicioModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\ServiciosViewModel.cs" />
     <Compile Include="Areas\Mantencion\Models\VehiculoModel.cs" />
     <Compile Include="Areas\Mantencion\Models\VehiculosViewModel.cs" />
     <Compile Include="Areas\Mantencion\Models\SidebarViewModel.cs" />
@@ -170,17 +173,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\RentarViewModel.cs" />
+    <Compile Include="Models\ViewModelMapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\fontawesome-webfont.svg" />
+    <Content Include="Images\Aveo_2010_ABCD12.png" />
+    <Content Include="Images\bg.jpg" />
+    <Content Include="Images\logo.jpg" />
     <Content Include="Images\SinImagen.png" />
-    <Content Include="Images\Aveo_2010.png" />
     <Content Include="Images\user2-160x160.jpg" />
     <Content Include="Images\user3-128x128.jpg" />
     <Content Include="Images\user4-128x128.jpg" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
+    <Content Include="Scripts\ct-navbar.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -247,6 +255,7 @@
     <Content Include="Styles\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Styles\ct-navbar.css" />
     <Content Include="Styles\font-awesome.css" />
     <Content Include="Styles\font-awesome.min.css" />
     <Content Include="Styles\select2.css" />
@@ -272,6 +281,9 @@
     <Content Include="Areas\Mantencion\Views\Reservas\CrearReserva.cshtml" />
     <Content Include="Areas\Mantencion\Views\Vehiculos\AgregarVehiculo.cshtml" />
     <Content Include="Areas\Mantencion\Views\Servicios\AgregarServicio.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Usuarios\Index.cshtml" />
+    <Content Include="Areas\Mantencion\Views\Usuarios\AgregarUsuario.cshtml" />
+    <Content Include="App_Code\WebControls.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -320,13 +332,13 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Informacion.cshtml" />
+    <Content Include="Views\Home\Contacto.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Rent.cshtml" />
+    <Content Include="Views\Home\Rentar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Views\Home\Partials\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Styles\bootstrap.min.css.map" />

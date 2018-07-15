@@ -1,6 +1,8 @@
 ﻿namespace SisRent.Vista.Areas.Mantencion.Controllers
 {
     using System.Collections.Generic;
+    using System.IO;
+    using System.Web;
     using System.Web.Mvc;
     using Entidades.Request;
     using Models;
@@ -11,10 +13,11 @@
         // GET: Mantencion/Vehiculos
         public ActionResult Index()
         {
+            var vmmh = new ViewModelMapperHelper();
             var model = new VehiculosViewModel
             {
-                ListaVehiculos = new ViewModelMapperHelper().ListaVehiculos(),
-                ListaMarcas = new ViewModelMapperHelper().ListaMarcas()
+                ListaVehiculos = vmmh.ListaVehiculos(),
+                ListaMarcas = vmmh.ListaMarcas()
             };
 
             return View(model);
@@ -68,7 +71,7 @@
             {
                 valid = true,
                 message = "",
-                modelos = new List<ComboModel>()
+                modelos = new List<Vista.Models.ComboModel>()
             };
             var modelos = new ViewModelMapperHelper().ListaModelos(idMarca);
             if (modelos.Count > 0)
@@ -86,7 +89,7 @@
                 {
                     valid = false,
                     message = "No se pueden obtener los modelos",
-                    modelos = new List<ComboModel>()
+                    modelos = new List<Vista.Models.ComboModel>()
                 };
             }
 
@@ -94,51 +97,53 @@
         }
 
         public JsonResult CrearVehiculo(int idModelo, int anio, decimal valor, string patente,
-            string rutaImagen, string observaciones)
+            string detalles, bool estado)
         {
             var response = new
             {
                 valid = true,
-                message = ""
+                message = "",
+                idVehiculo = 0
             };
             var vehiculo = new VehiculoModel
             {
                 IdModelo = idModelo,
                 Anio = anio,
                 Valor = valor,
-                Patente = patente,
-                Observaciones = observaciones
+                Patente = patente.ToUpper(),
+                RutaImagen = "/Images/SinImagen.png",
+                Detalles = detalles,
+                Estado = estado
             };
-            if (!string.IsNullOrWhiteSpace(rutaImagen) && Request.Files.Count > 0)
-            {
-                // TODO: Subir imagen
-                //Request.Files
-                vehiculo.RutaImagen = rutaImagen;
-            }
-            else
-            {
-                vehiculo.RutaImagen = "/Images/SinImagen.png";
-            }
 
             var crear = new VehiculosBo().AgregaVehiculo(new VehiculosRequest
             {
                 Vehiculo = new ViewModelMapperHelper().CrearVehiculo(vehiculo)
             });
-            if (!crear.EsValido)
+            if (crear.EsValido)
+            {
+                response = new
+                {
+                    valid = true,
+                    message = "",
+                    idVehiculo = crear.Vehiculo.IdVehiculo
+                };
+            }
+            else
             {
                 response = new
                 {
                     valid = false,
-                    message = crear.MensajeError
+                    message = crear.MensajeError,
+                    idVehiculo = 0
                 };
             }
-
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public JsonResult ActualizarVehiculo(int idVehiculo, int idModelo, int anio,
-            decimal valor, string patente, string rutaImagen, string observaciones)
+            decimal valor, string patente, string detalles)
         {
             var response = new
             {
@@ -154,15 +159,8 @@
                 vehiculo.Vehiculo.IdModelo = idModelo;
                 vehiculo.Vehiculo.Anio = anio;
                 vehiculo.Vehiculo.Valor = valor;
-                vehiculo.Vehiculo.Patente = patente;
-                if (!string.IsNullOrWhiteSpace(rutaImagen) && Request.Files.Count > 0)
-                {
-                    // TODO: Subir imagen
-                    //Request.Files
-                    vehiculo.Vehiculo.RutaImagen = rutaImagen;
-                }
-
-                vehiculo.Vehiculo.Observaciones = observaciones;
+                vehiculo.Vehiculo.Patente = patente.ToUpper();
+                vehiculo.Vehiculo.Detalles = detalles;
                 var cambio = new VehiculosBo().ActualizarVehiculo(new VehiculosRequest
                 {
                     Vehiculo = vehiculo.Vehiculo
@@ -186,6 +184,30 @@
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SubirImagen(int idVehiculo, HttpPostedFileBase rutaImagen)
+        {
+            var vehiculo = new VehiculosBo().ObtenerVehiculo(new VehiculosRequest
+            {
+                IdVehiculo = idVehiculo
+            });
+            if (vehiculo.EsValido && rutaImagen != null && Request.Files.Count > 0)
+            {
+                var veh = vehiculo.Vehiculo;
+                var nombreArchivo = string.Format("{0}_{1}_{2}{3}",
+                    veh.VehModelos.Modelo, veh.Anio, veh.Patente,
+                    Path.GetExtension(rutaImagen.FileName));
+                rutaImagen.SaveAs(Path.Combine(Server.MapPath("~/Images/"), nombreArchivo));
+
+                vehiculo.Vehiculo.RutaImagen = "/Images/" + nombreArchivo;
+                new VehiculosBo().ActualizarVehiculo(new VehiculosRequest
+                {
+                    Vehiculo = vehiculo.Vehiculo
+                });
+            }
+
+            return RedirectToAction("Index");
         }
 
         public JsonResult CambiarEstado(int idVehiculo, bool estado)

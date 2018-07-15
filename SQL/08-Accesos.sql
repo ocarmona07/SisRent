@@ -12,5 +12,8 @@ VALUES  ( 1, NULL, 'Inicio', 'Inicio', 'th', N'/Mantencion/Inicio' ),
         ( 7, 5, 'Agregar vehículo', 'Agregar/Editar vehículo', 'ambulance', N'/Mantencion/Vehiculos/AgregarVehiculo' ),
         ( 8, NULL, 'Servicios', 'Servicios', 'circle-o text-green', N'#' ),
         ( 9, 8, 'Lista de servicios', 'Listado de servicios', 'shopping-cart', N'/Mantencion/Servicios' ),
-        ( 10, 8, 'Agregar servicio', 'Agregar/Editar servicio', 'cart-plus', N'/Mantencion/Servicios/AgregarServicio' )
+        ( 10, 8, 'Agregar servicio', 'Agregar/Editar servicio', 'cart-plus', N'/Mantencion/Servicios/AgregarServicio' ),
+        ( 11, NULL, 'Usuarios', 'Usuarios', 'circle-o text-yellow', N'#' ),
+        ( 12, 11, 'Lista de usuarios', 'Listado de usuarios', 'users', N'/Mantencion/Usuarios' ),
+        ( 13, 11, 'Agregar usuario', 'Agregar/Editar usuario', 'user', N'/Mantencion/Usuarios/AgregarUsuario' )
 GO

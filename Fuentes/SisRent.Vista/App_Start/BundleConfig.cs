@@ -21,9 +21,13 @@
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/ct-navbar").Include(
+                      "~/Scripts/ct-navbar.js"));
+
             bundles.Add(new StyleBundle("~/Styles/css").Include(
                       "~/Styles/bootstrap.css",
                       "~/Styles/font-awesome.css",
+                      "~/Styles/ct-navbar.css",
                       "~/Styles/site.css"));
 
             bundles.Add(new StyleBundle("~/Styles/AdminLTE").Include(

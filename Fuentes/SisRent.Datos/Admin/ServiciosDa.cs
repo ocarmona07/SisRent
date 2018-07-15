@@ -29,6 +29,7 @@
             {
                 _sisRentModel.Servicios.Add(request.Servicio);
                 _sisRentModel.SaveChanges();
+                response.Servicio = request.Servicio;
             }
             catch (Exception e)
             {

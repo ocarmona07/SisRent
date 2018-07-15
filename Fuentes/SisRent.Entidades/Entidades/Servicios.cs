@@ -2,7 +2,6 @@ namespace SisRent.Entidades.Entidades
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class Servicios
     {
@@ -13,7 +12,6 @@ namespace SisRent.Entidades.Entidades
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IdServicio { get; set; }
 
         [Required]

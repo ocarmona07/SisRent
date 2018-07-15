@@ -29,6 +29,7 @@
             {
                 _sisRentModel.Usuarios.Add(request.Usuario);
                 _sisRentModel.SaveChanges();
+                response.Usuario = request.Usuario;
             }
             catch (Exception e)
             {

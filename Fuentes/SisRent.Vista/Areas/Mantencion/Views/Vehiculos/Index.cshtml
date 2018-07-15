@@ -42,7 +42,7 @@
                                 <td>@vehiculo.Marca - @vehiculo.Modelo</td>
                                 <td>@vehiculo.Anio</td>
                                 <td>@vehiculo.Patente</td>
-                                <td>@vehiculo.Observaciones</td>
+                                <td>@vehiculo.Detalles</td>
                                 <td>$ @vehiculo.Valor.ToString("N0")</td>
                                 <td>
                                     <button class="btn btn-warning btnEditar" title="Editar" data-id="@vehiculo.IdVehiculo"><i class="fa fa-edit"></i></button>
@@ -66,16 +66,16 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-editar" aria-keyboard="disable">
+    <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">×</span>
                     </button>
                     <h4 class="modal-title">Editar Vehículo</h4>
                 </div>
-                <form id="frmEditar" role="form" method="post" action="@Url.Action("ActualizarVehiculo", "Vehiculos", new {area = "Mantencion"})">
+                <form id="frmEditar" role="form" method="post" action="@Url.Action("SubirImagen", "Vehiculos", new {area = "Mantencion"})" enctype="multipart/form-data">
                     <input type="hidden" id="idVehiculo" name="idVehiculo" value="" />
                     <div class="modal-body">
                         <div class="row">
@@ -134,7 +134,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="tbDetalles">Detalles</label>
-                                            <textarea class="form-control" name="observaciones" id="tbDetalles" rows="3" placeholder="5 puertas, frenos ABS..."></textarea>
+                                            <textarea class="form-control" name="detalles" id="tbDetalles" rows="3" placeholder="5 puertas, frenos ABS..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@
                                     <label for="btnCambiarImagen">Imagen</label>
                                     <div><img class="img-responsive" id="imgAuto" src="@(urlBase + "/Images/SinImagen.png")" alt="Imagen Auto"></div>
                                     <input type="file" name="rutaImagen" id="btnCambiarImagen" style="width: 100%;">
-                                    <p class="help-block">Puede cambiar la imagen actual</p>
+                                    <p class="help-block">El tamaño óptimo es de 500x300</p>
                                 </div>
                             </div>
                         </div>
@@ -157,6 +157,7 @@
             </div>
         </div>
     </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
 </section>
 @section Styles
 {
@@ -188,7 +189,7 @@
                         $("#imgAuto").attr('src', '@urlBase' + response.vehiculo.RutaImagen);
                         $("#tbPatente").val(response.vehiculo.Patente);
                         $("#tbValor").val(response.vehiculo.Valor);
-                        $("#tbDetalles").val(response.vehiculo.Observaciones);
+                        $("#tbDetalles").val(response.vehiculo.Detalles);
 
                         $.ajax({
                             url: '@Url.Action("ObtenerModelos", "Vehiculos", new { area = "Mantencion" })',
@@ -250,14 +251,16 @@
                     anio: $("#ddlAnio").val(),
                     valor: $("#tbValor").val(),
                     patente: $("#tbPatente").val(),
-                    rutaImagen: $("#btnCambiarImagen").val(),
-                    observaciones: $("#tbDetalles").val()
+                    detalles: $("#tbDetalles").val()
                 },
                 success: function(response) {
                     if (response.valid) {
                         $("#modal-editar").modal("hide");
-                        alert("Vehículo actualizado!");
-                        window.location.href = '@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })';
+                        $("#modal-alerta .modal-body p").text("Vehículo actualizado correctamente");
+                        $("#modal-alerta .modal-content button").click(function () {
+                            $("#frmEditar").submit();
+                        });
+                        $("#modal-alerta").modal("show");
                     } else {
                         alert("Error: " + response.message);
                     }

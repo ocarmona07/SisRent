@@ -1,7 +1,191 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.ServiciosViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Servicios";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
+<section class="content-header">
+    <h1>
+        Servicios
+        <small>Lista de servicios</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Servicios</li>
+        <li class="active">Lista de servicios</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de servicios</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Descripción</th>
+                        <th>Valor</th>
+                        <th style="width: 200px">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaServicios != null && Model.ListaServicios.Any())
+                    {
+                        foreach (var servicio in Model.ListaServicios)
+                        {
+                            <tr>
+                                <td>@servicio.Servicio</td>
+                                <td>@servicio.Descripcion</td>
+                                <td>$ @servicio.Valor.ToString("N0")</td>
+                                <td>
+                                    <button class="btn btn-warning btnEditar" title="Editar" data-id="@servicio.IdServicio"><i class="fa fa-edit"></i></button>
+                                    <button class="btn @("btn-" + (servicio.Estado ? "success" : "danger")) btnEstado" title="@(servicio.Estado ? "Activado" : "Desactivado")" data-id="@servicio.IdServicio">
+                                        <i class="fa @("fa-" + (servicio.Estado ? "check" : "times"))"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="4">No hay servicios registrados</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <div class="pull-right">
+                <a href="@(urlBase + Url.Action("AgregarServicio"))" class="btn btn-success"><i class="fa fa-cart-plus"></i> Agregar Servicio</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Servicio</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idServicio" name="idServicio" value="" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tbServicio">Servicio</label>
+                                <input type="text" class="form-control" name="servicio" id="tbServicio" placeholder="Silla para bebé" maxlength="32">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tbValor">Valor</label>
+                                <input type="number" class="form-control" name="valor" id="tbValor" placeholder="12300" min="0" max="10000000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbDescripcion">Descripción</label>
+                                <textarea class="form-control" name="descripcion" id="tbDescripcion" rows="3" placeholder="Marca Infanty..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnGuardarEditar" class="btn btn-success">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+</section>
+@section Scripts
+{
+    <script>
+        $(document).on("click", ".btnEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerServicio", "Servicios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idServicio: $(this).attr("data-id")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#idServicio").val(response.servicio.IdServicio);
+                        $("#tbServicio").val(response.servicio.Servicio);
+                        $("#tbValor").val(response.servicio.Valor);
+                        $("#tbDescripcion").val(response.servicio.Descripcion);
+                        $("#modal-editar").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
 
-<h2>Index</h2>
+        $(document).on("click", "#btnGuardarEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ActualizarServicio", "Servicios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idServicio: $("#idServicio").val(),
+                    nombre: $("#tbServicio").val(),
+                    descripcion: $("#tbDescripcion").val(),
+                    valor: $("#tbValor").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar").modal("hide");
+                        $("#modal-alerta .modal-body p").text("Servicio actualizado correctamente");
+                        $("#modal-alerta .modal-footer button").click(function () {
+                            window.location.href = '@Url.Action("Index", "Servicios", new { area = "Mantencion" })';
+                        });
+                        $("#modal-alerta").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
 
+        $(document).on("click", ".btnEstado", function() {
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Servicios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idServicio: $(this).attr("data-id"),
+                    estado: !$(this).find("i").hasClass("fa-check")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        window.location.href = '@Url.Action("Index", "Servicios", new { area = "Mantencion" })';
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+    </script>
+}

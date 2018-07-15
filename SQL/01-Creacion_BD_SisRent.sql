@@ -256,7 +256,7 @@ create table Reservas (
    IdEstado             int                  not null,
    ValorFinal           decimal              not null,
    IdUsuario            int                  not null,
-   Observaciones        nvarchar(512)        null,
+   Observaciones        nvarchar(Max)        null,
    constraint PK_RESERVAS primary key (IdReserva)
 )
 go
@@ -288,7 +288,7 @@ go
 /* Table: Servicios                                             */
 /*==============================================================*/
 create table Servicios (
-   IdServicio           int                  not null,
+   IdServicio           int                  identity,
    Servicio             nvarchar(32)         not null,
    Descripcion          nvarchar(64)         null,
    Valor                decimal              not null,
@@ -344,10 +344,10 @@ create table Vehiculos (
    IdVehiculo           int                  identity,
    IdModelo             int                  null,
    Anio                 int                  not null,
-   Valor                decimal              not null,
    Patente              nvarchar(7)          not null,
    RutaImagen           nvarchar(256)        null,
-   Observaciones        nvarchar(512)        not null,
+   Detalles             nvarchar(Max)        not null,
+   Valor                decimal              not null,
    Estado               bit                  not null,
    constraint PK_VEHICULOS primary key (IdVehiculo)
 )

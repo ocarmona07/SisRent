@@ -6,9 +6,12 @@
     using Entidades.Request;
     using Negocio.Admin;
     using Negocio.Common;
+    using Vista.Models;
 
     public class ViewModelMapperHelper
     {
+        #region Vehículos
+
         public List<VehiculoModel> ListaVehiculos()
         {
             var response = new List<VehiculoModel>();
@@ -26,7 +29,7 @@
                     Valor = o.Valor,
                     Patente = o.Patente,
                     RutaImagen = o.RutaImagen,
-                    Observaciones = o.Observaciones,
+                    Detalles = o.Detalles,
                     Estado = o.Estado
                 }).ToList();
             }
@@ -52,7 +55,7 @@
                     Valor = lista.Vehiculo.Valor,
                     Patente = lista.Vehiculo.Patente,
                     RutaImagen = lista.Vehiculo.RutaImagen,
-                    Observaciones = lista.Vehiculo.Observaciones,
+                    Detalles = lista.Vehiculo.Detalles,
                     Estado = lista.Vehiculo.Estado
                 };
             }
@@ -103,9 +106,68 @@
                 Valor = model.Valor,
                 Patente = model.Patente,
                 RutaImagen = model.RutaImagen,
-                Observaciones = model.Observaciones,
+                Detalles = model.Detalles,
                 Estado = model.Estado
             };
         }
+
+        #endregion
+
+        #region Servicios
+
+        public List<ServicioModel> ListaServicios()
+        {
+            var response = new List<ServicioModel>();
+            var lista = new ServiciosBo().ObtenerServicios();
+            if (lista.EsValido)
+            {
+                response = lista.Servicios.Select(o => new ServicioModel
+                {
+                    IdServicio = o.IdServicio,
+                    Servicio = o.Servicio,
+                    Descripcion = o.Descripcion,
+                    Valor = o.Valor,
+                    Estado = o.Estado
+                }).ToList();
+            }
+
+            return response;
+        }
+
+        public ServicioModel ObtenerServicio(int idServicio)
+        {
+            var response = new ServicioModel();
+            var lista = new ServiciosBo().ObtenerServicio(new ServiciosRequest
+            {
+                IdServicio = idServicio
+            });
+            if (lista.EsValido)
+            {
+                response = new ServicioModel
+                {
+                    IdServicio = lista.Servicio.IdServicio,
+                    Servicio = lista.Servicio.Servicio,
+                    Descripcion = lista.Servicio.Descripcion,
+                    Valor = lista.Servicio.Valor,
+                    Estado = lista.Servicio.Estado
+                };
+            }
+
+            return response;
+        }
+
+        public Servicios CrearServicio(ServicioModel servicio)
+        {
+            return new Servicios
+            {
+                IdServicio = servicio.IdServicio,
+                Servicio = servicio.Servicio,
+                Descripcion = servicio.Descripcion,
+                Valor = servicio.Valor,
+                Estado = servicio.Estado
+            };
+        }
+
+        #endregion
     }
 }

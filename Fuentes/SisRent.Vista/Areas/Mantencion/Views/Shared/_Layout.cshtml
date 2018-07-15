@@ -1,13 +1,15 @@
 ﻿@using SisRent.Vista.Areas.Mantencion.Models
 @{
     //Validar Inicio
-    if (Session["HeaderViewModel"] == null)
+    if (Session.Keys.Count > 0 && Session["HeaderViewModel"] == null)
     {
-        Response.Redirect(Url.Action("Index", "Inicio", new { area = "Mantencion" }));
+        Response.Redirect(Url.Action("Index", "Inicio", new {area = "Mantencion"}));
     }
 
-    // Preconfigs
-    const string colorSkin = "green";
+    // *** Preconfigs ***
+    var version = System.Configuration.ConfigurationManager.AppSettings.Get("Version");
+    const bool light = false; // barra blanca o negra
+    const string colorSkin = "red" + (light ? "-light" : ""); // blue / black / purple / green / red / yellow
 }
 <!DOCTYPE html>
 <html>
@@ -29,10 +31,10 @@
         </div>
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                <b>Version</b> 2.4.0
+                <b>Versión</b> @version
             </div>
-            <strong>Copyright &copy; 2014-@DateTime.Now.Year <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-            reserved.
+            <strong>&copy; 2010-@DateTime.Now.Year <a href="#">OCR innovaciones</a>.</strong>
+            Todos los derechos reservados.
         </footer>
     </div>
     @Scripts.Render("~/Scripts/AdminLTE")

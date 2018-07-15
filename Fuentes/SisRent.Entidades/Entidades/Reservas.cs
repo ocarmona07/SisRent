@@ -53,7 +53,6 @@ namespace SisRent.Entidades.Entidades
 
         public int IdUsuario { get; set; }
 
-        [StringLength(512)]
         public string Observaciones { get; set; }
 
         public virtual Comunas Comunas { get; set; }

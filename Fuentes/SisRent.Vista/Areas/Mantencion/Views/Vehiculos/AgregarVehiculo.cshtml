@@ -1,7 +1,6 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.VehiculosViewModel
 @{
     ViewBag.Title = "Agregar Vehículo";
-    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
 <section class="content-header">
     <h1>
@@ -20,83 +19,80 @@
             <h3 class="box-title">Crear vehículo</h3>
         </div>
         <div class="box-body">
-            <form id="frmEditar" role="form" method="post" action="@Url.Action("CrearVehiculo", "Vehiculos", new {area = "Mantencion"})">
+            <form id="frmGuardar" role="form" method="post" action="@Url.Action("SubirImagen", "Vehiculos", new {area = "Mantencion"})" enctype="multipart/form-data">
+                <input type="hidden" id="idVehiculo" name="idVehiculo" value="" />
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="ddlMarca">Marca</label>
-                                    <select class="form-control select2" name="ddlMarca" id="ddlMarca">
-                                        <option value="">Seleccionar...</option>
-                                        @foreach (var item in Model.ListaMarcas)
-                                        {
-                                            <option value="@item.Value">@item.Text</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="ddlModelo">Modelo</label>
-                                    <select class="form-control select2" name="ddlModelo" id="ddlModelo">
-                                        <option value="">Seleccionar...</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ddlMarca">Marca</label>
+                            <select class="form-control select2" name="ddlMarca" id="ddlMarca">
+                                <option value="">Seleccionar...</option>
+                                @foreach (var item in Model.ListaMarcas)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="ddlAnio">Año</label>
-                                    <select class="form-control select2" name="ddlAnio" id="ddlAnio">
-                                        <option value="">Seleccionar...</option>
-                                        @for (var an = 2000; an <= DateTime.Now.Year; an++)
-                                        {
-                                            <option value="@an">@an</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="tbPatente">Patente</label>
-                                    <input type="text" class="form-control" name="tbPatente" id="tbPatente" placeholder="AB1234" maxlength="6">
-                                </div>
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ddlModelo">Modelo</label>
+                            <select class="form-control select2" name="ddlModelo" id="ddlModelo">
+                                <option value="">Seleccionar...</option>
+                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="tbValor">Valor</label>
-                                    <input type="number" class="form-control" name="tbValor" id="tbValor" placeholder="20000">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="checkbox" style="margin-top: 32px;">
-                                        <label>
-                                            <input type="checkbox" name="chkEstado" id="chkEstado">
-                                            Activo
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ddlAnio">Año</label>
+                            <select class="form-control select2" name="ddlAnio" id="ddlAnio">
+                                <option value="">Seleccionar...</option>
+                                @for (var an = 2000; an <= DateTime.Now.Year; an++)
+                                {
+                                    <option value="@an">@an</option>
+                                }
+                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="tbDetalles">Detalles</label>
-                                    <textarea class="form-control" name="tbDetalles" id="tbDetalles" rows="4" placeholder="5 puertas, frenos ABS..."></textarea>
-                                </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tbPatente">Patente</label>
+                            <input type="text" class="form-control" name="tbPatente" id="tbPatente" placeholder="AB1234" maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tbValor">Valor</label>
+                            <input type="number" class="form-control" name="tbValor" id="tbValor" placeholder="20000">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="btnCambiarImagen">Imagen</label>
+                            <input type="file" name="rutaImagen" id="btnCambiarImagen" style="width: 100%;" accept="image/*">
+                            <p class="help-block">El tamaño óptimo es de 500x300</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="checkbox" style="margin-top: 32px;">
+                                <label>
+                                    <input type="checkbox" name="chkEstado" id="chkEstado">
+                                    Activo
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label for="btnCambiarImagen">Imagen</label>
-                            <div><img class="img-responsive" src="@(urlBase + "/Images/SinImagen.png")" alt="Imagen Auto"></div>
-                            <input type="file" name="btnCambiarImagen" id="btnCambiarImagen" style="width: 100%;" accept="image/*">
+                            <label for="tbDetalles">Detalles</label>
+                            <textarea class="form-control" name="detalles" id="tbDetalles" rows="4" placeholder="5 puertas, frenos ABS..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -106,6 +102,7 @@
             <button type="button" id="btnCrear" class="btn btn-success pull-right">Crear Vehículo</button>
         </div>
     </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
 </section>
 @section Styles
 {
@@ -151,14 +148,17 @@
                     anio: $("#ddlAnio").val(),
                     valor: $("#tbValor").val(),
                     patente: $("#tbPatente").val(),
-                    rutaImagen: $("#btnCambiarImagen").val(),
-                    observaciones: $("#tbDetalles").val()
+                    detalles: $("#tbDetalles").val(),
+                    estado: $("#chkEstado").prop("checked")
                 },
                 success: function(response) {
                     if (response.valid) {
-                        $("#modal-editar").modal("hide");
-                        alert("Vehículo Creado!");
-                        window.location.href = '@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })';
+                        $("#idVehiculo").val(response.idVehiculo);
+                        $("#modal-alerta .modal-body p").text("Vehículo agregado correctamente");
+                        $("#modal-alerta .modal-content button").click(function () {
+                            $("#frmGuardar").submit();
+                        });
+                        $("#modal-alerta").modal("show");
                     } else {
                         alert("Error: " + response.message);
                     }
