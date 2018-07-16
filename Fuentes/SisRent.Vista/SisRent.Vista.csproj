@@ -181,7 +181,10 @@
     <Content Include="Fonts\fontawesome-webfont.svg" />
     <Content Include="Images\Aveo_2010_ABCD12.png" />
     <Content Include="Images\bg.jpg" />
+    <Content Include="Images\HIUNDAI.png" />
+    <Content Include="Images\KIA.png" />
     <Content Include="Images\logo.jpg" />
+    <Content Include="Images\NISSAN.png" />
     <Content Include="Images\SinImagen.png" />
     <Content Include="Images\user2-160x160.jpg" />
     <Content Include="Images\user3-128x128.jpg" />
@@ -336,10 +339,9 @@
     <Content Include="Views\Home\Contacto.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Rentar.cshtml" />
+    <Content Include="Views\Home\Partials\TerminosPartial.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Home\Partials\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Styles\bootstrap.min.css.map" />
     <Content Include="Styles\bootstrap.css.map" />

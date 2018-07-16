@@ -32,9 +32,15 @@
 
         public ActionResult Contacto()
         {
-            ViewBag.Message = "Contacto";
-
             return View();
+        }
+
+        public ActionResult EnviarCorreo(string titulo, string nombre, string correo,
+            string mensaje)
+        {
+            ViewBag.Correo = "Mensaje Enviado: " + titulo;
+
+            return RedirectToAction("Contacto");
         }
     }
 }

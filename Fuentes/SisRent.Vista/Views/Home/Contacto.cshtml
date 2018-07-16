@@ -1,17 +1,46 @@
 ﻿@{
     ViewBag.Title = "Contacto";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
-
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<div class="text-center text-blue">
+    <h2><strong>FORMULARIO DE CONTACTO</strong></h2>
+</div>
+<hr />
+<form method="post" action="@Url.Action("EnviarCorreo")" class="form-horizontal">
+    <div class="form-group">
+        <label for="titulo" class="col-sm-4 control-label">Titulo</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Escriba un título para el mensaje" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="nombre" class="col-sm-4 control-label">Nombre</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ingrese su nombre" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="correo" class="col-sm-4 control-label">Correo</label>
+        <div class="col-sm-8">
+            <input type="email" class="form-control" name="correo" id="correo" placeholder="Ingrese su email" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="mensaje" class="col-sm-4 control-label">Mensaje</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" name="mensaje" id="mensaje" rows="5" placeholder="Escriba su mensaje..." required></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-lg btn-danger">Enviar Mensaje</button></div>
+    </div>
+</form>
+@if (!string.IsNullOrWhiteSpace(ViewBag.Correo))
+{
+    @WebControls.ModalAlert("Contacto", ViewBag.Correo)
+    <script>
+        $(document).ready(function() {
+            $("#modal-alerta").modal("show");
+        });
+    </script>
+}

@@ -4,8 +4,8 @@
     var listaComunas = Model.ListaComunas;
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
-<div class="text-center">
-    <h2>Cotización de Vehículo</h2>
+<div class="text-center text-blue">
+    <h2><strong>COTIZACIÓN DE VEHÍCULO</strong></h2>
 </div>
 <hr />
 <div>
@@ -66,41 +66,34 @@
 <hr />
 <div>
     <p class="h4">2. Seleccione un vehículo</p>
-    <ul class="nav nav-pills" data-toggle="buttons">
+    <div class="btn-group vehiculo" data-toggle="buttons">
         @foreach (var vehiculo in Model.ListaVehiculos.Where(o => o.Estado))
         {
-            <li class="thumbnail">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked>
-                <img src="@(urlBase + vehiculo.RutaImagen)" class="img-rounded img-responsive" alt="Imagen Auto" style="width: 340px" />
+            <label class="btn thumbnail">
+                <img src="@(urlBase + vehiculo.RutaImagen)" class="img-rounded img-responsive" alt="Imagen Auto" style="width: 340px;" />
                 <p class="text-center">
                     Marca: @vehiculo.Marca
                     <br />Modelo: @vehiculo.Modelo
                     <br />Año: @vehiculo.Anio
                     <br /><strong>Valor diario: $ @vehiculo.Valor.ToString("N0").-</strong>
                 </p>
-            </li>
-            <li class="thumbnail">
-                <input type="radio" name="options" id="option2" autocomplete="off">
-                <img src="@(urlBase + vehiculo.RutaImagen)" class="img-rounded img-responsive" alt="Imagen Auto" style="width: 340px" />
-                <p class="text-center">
-                    Marca: @vehiculo.Marca
-                    <br />Modelo: @vehiculo.Modelo
-                    <br />Año: @vehiculo.Anio
-                    <br /><strong>Valor diario: $ @vehiculo.Valor.ToString("N0").-</strong>
-                </p>
-            </li>
+                <input type="radio" name="vehiculos" id="@vehiculo.Patente" data-id="@vehiculo.IdVehiculo" data-valor="@vehiculo.Valor" class="hidden" autocomplete="off" />
+            </label>
         }
-    </ul>
+    </div>
 </div>
 <hr />
 <div>
     <p class="h4">3. Servicios adicionales</p>
-    <ul class="nav nav-pills">
+    <div class="btn-group checkbox servicios" data-toggle="buttons">
         @foreach (var servicio in Model.ListaServicios.Where(o => o.Estado))
         {
-            <li><a href="#" data-toggle="tab" aria-expanded="true">@servicio.Servicio $ @servicio.Valor.ToString("N0").-</a></li>
+            <label class="btn btn-primary">
+                <input type="checkbox" value="@servicio.IdServicio" data-valor="@servicio.Valor" name="servicios" class="hidden" autocomplete="off" />
+                @servicio.Servicio $ @servicio.Valor.ToString("N0").-
+            </label>
         }
-    </ul>
+    </div>
 </div>
 <hr />
 <div>
@@ -163,12 +156,12 @@
     </div>
     <div class="col-md-6">
         <div class="pull-right">
-            <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-lg btn-success">Total a pagar: $ 0.-</button>
+            <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-lg btn-success">Calcular Total</button>
         </div>
     </div>
 </div>
 <div class="modal fade" id="modal-condiciones" data-keyboard="disable" data-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -177,7 +170,7 @@
                 <h4 class="modal-title text-center">Términos y condiciones</h4>
             </div>
             <div class="modal-body">
-                <p>bla bla bla</p>
+                @Html.Partial("Partials/TerminosPartial")
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning pull-left" id="btnCancelarCondiciones">Cancelar</button>
@@ -186,6 +179,7 @@
         </div>
     </div>
 </div>
+@WebControls.ModalAlert("Mensaje Alerta", "")
 @section Styles
 {
     @Styles.Render("~/Styles/select2")
@@ -195,8 +189,20 @@
     @Scripts.Render("~/Scripts/select2")
     <script>
         function CalcularTotal() {
-            var valorAuto = 1000;
-            var valorServicios = 2000;
+            var valorAuto = parseFloat($(".vehiculo input:radio:checked").attr("data-valor"));
+            if (isNaN(valorAuto)) {
+                $("#modal-alerta .modal-body p").text("Debe seleccionar un vehículo");
+                $("#modal-alerta").modal("show");
+                $(".servicios input:checkbox").prop("checked", false);
+                $(".servicios label.active").removeClass("active");
+                return;
+            }
+
+            var valorServicios = 0;
+            $(".servicios input:checkbox:checked").each(function(i, val){
+                valorServicios += parseFloat($(val).attr("data-valor"));
+            });
+
             var total = valorAuto + valorServicios;
             $("#btnAceptar").text("Total a pagar: $ " + total + ".-");
         }
@@ -215,7 +221,20 @@
             $("#modal-condiciones").modal("hide");
         });
 
+        $(document).on("click", ".servicios .btn,.vehiculo .thumbnail", function () {
+            var chk = $(this).find("input");
+            chk.prop("checked", (chk.attr("type") !== "radio" ? !chk.prop("checked") : true));
+            CalcularTotal();
+        });
+
         $(document).on("click", "#btnAceptar", function () {
+
+
+            if (!$("#chkCondiciones").prop("checked")) {
+                $("#modal-alerta .modal-body p").text("Debe aceptar los términos y condiciones");
+                $("#modal-alerta").modal("show");
+            }
+
             CalcularTotal();
         });
     </script>
