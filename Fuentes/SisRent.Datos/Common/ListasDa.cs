@@ -157,25 +157,5 @@
 
             return response;
         }
-        
-        public ListasResponse ObtenerReservaServicios()
-        {
-            var response = new ListasResponse
-            {
-                EsValido = true,
-                ReservaServicios = new List<ReservaServicio>()
-            };
-            try
-            {
-                response.ReservaServicios = _sisRentModel.ReservaServicio.ToList();
-            }
-            catch (Exception e)
-            {
-                response.EsValido = false;
-                response.MensajeError = e.GetBaseException().Message;
-            }
-
-            return response;
-        }
     }
 }

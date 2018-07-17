@@ -47,6 +47,18 @@
 
             bundles.Add(new ScriptBundle("~/Scripts/select2").Include(
                       "~/Scripts/select2.full.min.js"));
+
+            bundles.Add(new StyleBundle("~/Styles/datepicker").Include(
+                      "~/Styles/bootstrap-datepicker3.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/datepicker").Include(
+                      "~/Scripts/bootstrap-datepicker.min.js"));
+
+            bundles.Add(new StyleBundle("~/Styles/timepicker").Include(
+                      "~/Styles/bootstrap-timepicker.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/timepicker").Include(
+                      "~/Scripts/bootstrap-timepicker.js"));
         }
     }
 }

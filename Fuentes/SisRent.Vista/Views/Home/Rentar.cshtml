@@ -26,13 +26,13 @@
         <div class="col-md-4 col-md-offset-1">
             <div class="form-group">
                 <label for="tbFechaRetiro">Fecha de retiro</label>
-                <input type="text" class="form-control" name="tbFechaRetiro" id="tbFechaRetiro">
+                <input type="text" class="form-control date" name="tbFechaRetiro" id="tbFechaRetiro" readonly="readonly">
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label for="tbHoraRetiro">Hora de retiro</label>
-                <input type="text" class="form-control" name="tbHoraRetiro" id="tbHoraRetiro">
+                <input type="text" class="form-control time" name="tbHoraRetiro" id="tbHoraRetiro" readonly="readonly">
             </div>
         </div>
     </div>
@@ -52,13 +52,13 @@
         <div class="col-md-4 col-md-offset-1">
             <div class="form-group">
                 <label for="tbFechaEntrega">Fecha de entrega</label>
-                <input type="text" class="form-control" name="tbFechaEntrega" id="tbFechaEntrega">
+                <input type="text" class="form-control date" name="tbFechaEntrega" id="tbFechaEntrega" readonly="readonly">
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label for="tbHoraEntrega">Hora de entrega</label>
-                <input type="text" class="form-control" name="tbHoraEntrega" id="tbHoraEntrega">
+                <input type="text" class="form-control time" name="tbHoraEntrega" id="tbHoraEntrega" readonly="readonly">
             </div>
         </div>
     </div>
@@ -71,13 +71,13 @@
         {
             <label class="btn thumbnail">
                 <img src="@(urlBase + vehiculo.RutaImagen)" class="img-rounded img-responsive" alt="Imagen Auto" style="width: 340px;" />
-                <p class="text-center">
+                <span class="text-center">
                     Marca: @vehiculo.Marca
                     <br />Modelo: @vehiculo.Modelo
                     <br />Año: @vehiculo.Anio
                     <br /><strong>Valor diario: $ @vehiculo.Valor.ToString("N0").-</strong>
-                </p>
-                <input type="radio" name="vehiculos" id="@vehiculo.Patente" data-id="@vehiculo.IdVehiculo" data-valor="@vehiculo.Valor" class="hidden" autocomplete="off" />
+                </span>
+                <input type="radio" name="vehiculos" id="@vehiculo.Patente" value="@vehiculo.IdVehiculo" data-valor="@vehiculo.Valor" class="hidden" autocomplete="off" />
             </label>
         }
     </div>
@@ -183,32 +183,61 @@
 @section Styles
 {
     @Styles.Render("~/Styles/select2")
+    @Styles.Render("~/Styles/datepicker")
+    @Styles.Render("~/Styles/timepicker")
 }
 @section Scripts
 {
     @Scripts.Render("~/Scripts/select2")
+    @Scripts.Render("~/Scripts/datepicker")
+    @Scripts.Render("~/Scripts/timepicker")
     <script>
+        function MostrarMensaje(mensaje) {
+            $("#modal-alerta .modal-body p").text(mensaje);
+            $("#modal-alerta").modal("show");
+        }
+
         function CalcularTotal() {
             var valorAuto = parseFloat($(".vehiculo input:radio:checked").attr("data-valor"));
             if (isNaN(valorAuto)) {
-                $("#modal-alerta .modal-body p").text("Debe seleccionar un vehículo");
-                $("#modal-alerta").modal("show");
+                MostrarMensaje("Debe seleccionar un vehículo");
                 $(".servicios input:checkbox").prop("checked", false);
                 $(".servicios label.active").removeClass("active");
                 return;
             }
 
             var valorServicios = 0;
-            $(".servicios input:checkbox:checked").each(function(i, val){
-                valorServicios += parseFloat($(val).attr("data-valor"));
+            $(".servicios input:checkbox:checked").each(function (i, item) {
+                valorServicios += parseFloat($(item).attr("data-valor"));
             });
 
             var total = valorAuto + valorServicios;
             $("#btnAceptar").text("Total a pagar: $ " + total + ".-");
         }
 
+        function LimpiarControles() {
+            
+        }
+
         $(document).ready(function () {
             $(".select2").select2();
+
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy',
+                startDate: '0d',
+                todayHighlight: true,
+                autoclose: true
+            });
+
+            $(".time").timepicker({
+                minuteStep: 5,
+                showMeridian: false,
+                icons: {
+                    up: 'fa fa-caret-up',
+                    down: 'fa fa-caret-down'
+                },
+                disableFocus: false
+            });
         });
 
         $(document).on("click", "#btnAceptarCondiciones", function () {
@@ -228,14 +257,98 @@
         });
 
         $(document).on("click", "#btnAceptar", function () {
+            if (isNaN($(".vehiculo input:radio:checked").attr("data-valor"))) {
+                MostrarMensaje("Debe seleccionar un vehículo");
+                return;
+            }
 
+            if ($("#ddlRetiro").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de retiro");
+                return;
+            }
+            if ($("#tbFechaRetiro").val().length <= 0 || $("#tbHoraRetiro").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una fecha y hora de retiro");
+                return;
+            }
+            if ($("#ddlEntrega").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de entrega");
+                return;
+            }
+            if ($("#tbFechaEntrega").val().length <= 0 || $("#tbHoraEntrega").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una fecha y hora de entrega");
+                return;
+            }
+            if ($("#tbNombres").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un nombre para la reserva");
+                return;
+            }
+            if ($("#tbApellidos").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un apellido para la reserva");
+                return;
+            }
+            if ($("#tbEmail").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un correo para la reserva");
+                return;
+            }
+            if ($("#tbDireccion").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una dirección para la reserva");
+                return;
+            }
+            if ($("#ddlComuna").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de procedencia para la reserva");
+                return;
+            }
+            if ($("#tbTelefono").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un teléfono de contacto para la reserva");
+                return;
+            }
 
             if (!$("#chkCondiciones").prop("checked")) {
-                $("#modal-alerta .modal-body p").text("Debe aceptar los términos y condiciones");
-                $("#modal-alerta").modal("show");
+                MostrarMensaje("Debe aceptar los términos y condiciones");
+                return;
             }
 
             CalcularTotal();
+
+            var servicios = new Array();
+            $(".servicios input:checkbox:checked").each(function (i, item) {
+                servicios.push(parseInt($(item).val()));
+            });
+
+            $.ajax({
+                url: '@Url.Action("CrearReserva")',
+                type: 'POST',
+                traditional: true,
+                data: {
+                    comunaRetiro: $("#ddlRetiro").val(),
+                    fechaRetiro: $("#tbFechaRetiro").val(),
+                    horaRetiro: $("#tbHoraRetiro").val(),
+                    comunaEntrega: $("#ddlEntrega").val(),
+                    fechaEntrega: $("#tbFechaEntrega").val(),
+                    horaEntrega: $("#tbHoraEntrega").val(),
+                    idVehiculo: $(".vehiculo input:radio:checked").val(),
+                    servicios: servicios,
+                    nombres: $("#tbNombres").val(),
+                    apellidos: $("#tbApellidos").val(),
+                    email: $("#tbEmail").val(),
+                    direccion: $("#tbDireccion").val(),
+                    comuna: $("#ddlComuna").val(),
+                    telefono: $("#tbTelefono").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        MostrarMensaje("Reserva ingresada correctamente");
+                        $("#modal-alerta .modal-footer button").click(function() {
+                            window.location.href = '@Url.Action("CrearReserva")';
+                        });
+                    } else {
+                        MostrarMensaje("Error al crear la reserva. Contacte al administrador");
+                    }
+                },
+                error: function() {
+                    MostrarMensaje("Error al crear la reserva. Contacte al administrador");
+                }
+            });
         });
     </script>
 }

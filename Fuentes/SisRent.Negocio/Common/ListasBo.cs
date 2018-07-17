@@ -39,10 +39,5 @@
         {
             return new ListasDa().ObtenerEstados();
         }
-
-        public ListasResponse ObtenerReservaServicios()
-        {
-            return new ListasDa().ObtenerReservaServicios();
-        }
     }
 }

@@ -131,6 +131,21 @@ h1 .subtitle {
         outline: 0 none;
     }
 
+.vehiculo .active {
+    background-color: #dddddd;
+    border: 4px solid red;
+    border-radius: 12px;
+}
+
+.servicios .active {
+    background-color: #dd4b39;
+    border-color: #dc143c;
+}
+
+.servicios .active:hover {
+    background-color: #a52a2a;
+    border-color: #dc143c;
+}
 /*           Navigation Bar             */
 .navbar {
     border: 0 none;
@@ -412,9 +427,11 @@ h1 .subtitle {
 .navbar-default .navbar-brand-logo .brand {
     color: #555;
 }
+
 .text-red {
-     color: #dd4b39 !important;
- }
+    color: #dd4b39 !important;
+}
+
 .text-blue {
     color: #0073b7 !important;
 }

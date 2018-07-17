@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\EnumEstados.cs" />
     <Compile Include="Common\ResponseBase.cs" />
     <Compile Include="Entidades\Accesos.cs" />
     <Compile Include="Entidades\Comunas.cs" />
@@ -64,11 +65,13 @@
     <Compile Include="Entidades\VehMarcas.cs" />
     <Compile Include="Entidades\VehModelos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\ReservaServiciosRequest.cs" />
     <Compile Include="Request\ReservasRequest.cs" />
     <Compile Include="Request\ServiciosRequest.cs" />
     <Compile Include="Request\UsuariosRequest.cs" />
     <Compile Include="Request\VehiculosRequest.cs" />
     <Compile Include="Response\ListasResponse.cs" />
+    <Compile Include="Response\ReservaServiciosResponse.cs" />
     <Compile Include="Response\ReservasResponse.cs" />
     <Compile Include="Response\ServiciosResponse.cs" />
     <Compile Include="Response\UsuariosResponse.cs" />

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\ReservaServiciosBo.cs" />
     <Compile Include="Admin\ReservasBo.cs" />
     <Compile Include="Admin\ServiciosBo.cs" />
     <Compile Include="Admin\UsuariosBo.cs" />

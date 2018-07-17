@@ -191,6 +191,9 @@
     <Content Include="Images\user4-128x128.jpg" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-timepicker.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\ct-navbar.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
@@ -252,8 +255,11 @@
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Styles\AdminLTE.css" />
     <Content Include="Styles\AdminLTE.min.css" />
+    <Content Include="Styles\bootstrap-datepicker3.css" />
     <Content Include="Styles\bootstrap-theme.css" />
     <Content Include="Styles\bootstrap-theme.min.css" />
+    <Content Include="Styles\bootstrap-timepicker.css" />
+    <Content Include="Styles\bootstrap-timepicker.min.css" />
     <Content Include="Styles\bootstrap.css" />
     <Content Include="Styles\bootstrap.min.css" />
     <Content Include="favicon.ico" />
