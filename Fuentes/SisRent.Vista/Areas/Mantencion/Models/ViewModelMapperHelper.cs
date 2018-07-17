@@ -1,5 +1,6 @@
 ﻿namespace SisRent.Vista.Areas.Mantencion.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Entidades.Entidades;
@@ -40,23 +41,23 @@
         public VehiculoModel ObtenerVehiculo(int idVehiculo)
         {
             var response = new VehiculoModel();
-            var lista = new VehiculosBo().ObtenerVehiculo(new VehiculosRequest
+            var item = new VehiculosBo().ObtenerVehiculo(new VehiculosRequest
             {
                 IdVehiculo = idVehiculo
             });
-            if (lista.EsValido)
+            if (item.EsValido)
             {
                 response = new VehiculoModel
                 {
-                    IdVehiculo = lista.Vehiculo.IdVehiculo,
-                    IdMarca = lista.Vehiculo.VehModelos.IdMarca,
-                    IdModelo = lista.Vehiculo.IdModelo,
-                    Anio = lista.Vehiculo.Anio,
-                    Valor = lista.Vehiculo.Valor,
-                    Patente = lista.Vehiculo.Patente,
-                    RutaImagen = lista.Vehiculo.RutaImagen,
-                    Detalles = lista.Vehiculo.Detalles,
-                    Estado = lista.Vehiculo.Estado
+                    IdVehiculo = item.Vehiculo.IdVehiculo,
+                    IdMarca = item.Vehiculo.VehModelos.IdMarca,
+                    IdModelo = item.Vehiculo.IdModelo,
+                    Anio = item.Vehiculo.Anio,
+                    Valor = item.Vehiculo.Valor,
+                    Patente = item.Vehiculo.Patente,
+                    RutaImagen = item.Vehiculo.RutaImagen,
+                    Detalles = item.Vehiculo.Detalles,
+                    Estado = item.Vehiculo.Estado
                 };
             }
 
@@ -137,19 +138,19 @@
         public ServicioModel ObtenerServicio(int idServicio)
         {
             var response = new ServicioModel();
-            var lista = new ServiciosBo().ObtenerServicio(new ServiciosRequest
+            var item = new ServiciosBo().ObtenerServicio(new ServiciosRequest
             {
                 IdServicio = idServicio
             });
-            if (lista.EsValido)
+            if (item.EsValido)
             {
                 response = new ServicioModel
                 {
-                    IdServicio = lista.Servicio.IdServicio,
-                    Servicio = lista.Servicio.Servicio,
-                    Descripcion = lista.Servicio.Descripcion,
-                    Valor = lista.Servicio.Valor,
-                    Estado = lista.Servicio.Estado
+                    IdServicio = item.Servicio.IdServicio,
+                    Servicio = item.Servicio.Servicio,
+                    Descripcion = item.Servicio.Descripcion,
+                    Valor = item.Servicio.Valor,
+                    Estado = item.Servicio.Estado
                 };
             }
 
@@ -166,6 +167,178 @@
                 Valor = servicio.Valor,
                 Estado = servicio.Estado
             };
+        }
+
+        #endregion
+
+        #region Reservas
+
+        public List<ReservaModel> ListaReservas()
+        {
+            var response = new List<ReservaModel>();
+            var lista = new ReservasBo().ObtenerReservas();
+            if (lista.EsValido)
+            {
+                response = lista.Reservas.Select(o => new ReservaModel
+                {
+                    IdReserva = o.IdReserva,
+                    IdComunaRetiro = o.IdComunaRetiro,
+                    ComunaRetiro = o.Comunas.Comuna,
+                    FechaHoraRetiro = o.FechaRetiro,
+                    IdComunaEntrega = o.IdComunaEntrega,
+                    ComunaEntrega = o.Comunas1.Comuna,
+                    FechaHoraEntrega = o.FechaEntrega ?? DateTime.MinValue,
+                    IdVehiculo = o.IdVehiculo,
+                    Vehiculo = ObtenerVehiculo(o.IdVehiculo),
+                    Nombres = o.Nombres,
+                    Apellidos = o.Apellidos,
+                    Email = o.Email,
+                    Direccion = o.Direccion,
+                    IdComuna = o.IdComuna,
+                    Comuna = o.Comunas2.Comuna,
+                    Telefono = o.Telefono,
+                    IdEstado = o.IdEstado,
+                    Estado = o.Estados.Estado,
+                    ValorFinal = o.ValorFinal,
+                    IdUsuario = o.IdUsuario,
+                    Usuario = ObtenerUsuario(o.IdUsuario),
+                    Observaciones = o.Observaciones
+                }).ToList();
+            }
+
+            return response;
+        }
+
+        public ReservaModel ObtenerReserva(int idReserva)
+        {
+            var response = new ReservaModel();
+            var item = new ReservasBo().ObtenerReserva(new ReservasRequest
+            {
+                IdReserva = idReserva
+            });
+            if (item.EsValido)
+            {
+                response = new ReservaModel
+                {
+                    IdReserva = item.Reserva.IdReserva,
+                    IdComunaRetiro = item.Reserva.IdComunaRetiro,
+                    ComunaRetiro = item.Reserva.Comunas.Comuna,
+                    FechaHoraRetiro = item.Reserva.FechaRetiro,
+                    IdComunaEntrega = item.Reserva.IdComunaEntrega,
+                    ComunaEntrega = item.Reserva.Comunas1.Comuna,
+                    FechaHoraEntrega = item.Reserva.FechaEntrega ?? DateTime.MinValue,
+                    IdVehiculo = item.Reserva.IdVehiculo,
+                    Vehiculo = ObtenerVehiculo(item.Reserva.IdVehiculo),
+                    Nombres = item.Reserva.Nombres,
+                    Apellidos = item.Reserva.Apellidos,
+                    Email = item.Reserva.Email,
+                    Direccion = item.Reserva.Direccion,
+                    IdComuna = item.Reserva.IdComuna,
+                    Comuna = item.Reserva.Comunas2.Comuna,
+                    Telefono = item.Reserva.Telefono,
+                    IdEstado = item.Reserva.IdEstado,
+                    Estado = item.Reserva.Estados.Estado,
+                    ValorFinal = item.Reserva.ValorFinal,
+                    IdUsuario = item.Reserva.IdUsuario,
+                    Usuario = ObtenerUsuario(item.Reserva.IdUsuario),
+                    Observaciones = item.Reserva.Observaciones
+                };
+            }
+
+            return response;
+        }
+
+        #endregion
+
+        #region Usuarios
+
+        public List<UsuarioModel> ListaUsuarios()
+        {
+            var response = new List<UsuarioModel>();
+            var lista = new UsuariosBo().ObtenerUsuarios();
+            if (lista.EsValido)
+            {
+                response = lista.Usuarios.Select(o => new UsuarioModel
+                {
+                    IdUsuario = o.IdUsuario,
+                    Rut = o.Rut,
+                    Nombres = o.Nombres,
+                    ApPaterno = o.ApPaterno,
+                    ApMaterno = o.ApMaterno,
+                    Telefono = o.Telefono,
+                    Email = o.Email,
+                    RutaImagen = o.RutaImagen,
+                    IdRol = o.IdRol,
+                    Rol = o.Roles.Rol,
+                    Clave = o.Clave,
+                    Estado = o.Estado
+                }).ToList();
+            }
+
+            return response;
+        }
+
+        public UsuarioModel ObtenerUsuario(int idUsuario)
+        {
+            var response = new UsuarioModel();
+            var item = new UsuariosBo().ObtenerUsuario(new UsuariosRequest
+            {
+                IdUsuario = idUsuario
+            });
+            if (item.EsValido)
+            {
+                response = new UsuarioModel
+                {
+                    IdUsuario = item.Usuario.IdUsuario,
+                    Rut = item.Usuario.Rut,
+                    Nombres = item.Usuario.Nombres,
+                    ApPaterno = item.Usuario.ApPaterno,
+                    ApMaterno = item.Usuario.ApMaterno,
+                    Telefono = item.Usuario.Telefono,
+                    Email = item.Usuario.Email,
+                    RutaImagen = item.Usuario.RutaImagen,
+                    IdRol = item.Usuario.IdRol,
+                    Rol = item.Usuario.Roles.Rol,
+                    Clave = item.Usuario.Clave,
+                    Estado = item.Usuario.Estado
+                };
+            }
+
+            return response;
+        }
+
+        public Usuarios CrearUsuario(UsuarioModel usuario)
+        {
+            return new Usuarios
+            {
+                IdUsuario = usuario.IdUsuario,
+                Rut = usuario.Rut,
+                Nombres = usuario.Nombres,
+                ApPaterno = usuario.ApPaterno,
+                ApMaterno = usuario.ApMaterno,
+                Telefono = usuario.Telefono,
+                Email = usuario.Email,
+                RutaImagen = usuario.RutaImagen,
+                IdRol = usuario.IdRol,
+                Clave = usuario.Clave,
+                Estado = usuario.Estado
+            };
+        }
+
+        public List<ComboModel> ListaRoles()
+        {
+            var response = new List<ComboModel>();
+            var lista = new ListasBo().ObtenerRoles();
+            if (lista.EsValido)
+            {
+                response = lista.Roles.Select(o => new ComboModel
+                {
+                    Text = o.Rol,
+                    Value = o.IdRol.ToString()
+                }).ToList();
+            }
+
+            return response;
         }
 
         #endregion

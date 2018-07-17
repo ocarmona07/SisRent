@@ -309,7 +309,7 @@ create table Usuarios (
    Telefono             nvarchar(10)         null,
    Email                nvarchar(64)         null,
    RutaImagen           nvarchar(256)        null,
-   IdRol                int                  null,
+   IdRol                int                  not null,
    Clave                nvarchar(16)         not null,
    Estado               bit                  not null,
    constraint PK_USUARIOS primary key (IdUsuario)

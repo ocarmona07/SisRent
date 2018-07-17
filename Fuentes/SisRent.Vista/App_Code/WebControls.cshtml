@@ -20,3 +20,14 @@
         </div>
     </div>
 }
+
+@* Muestra Rut con puntos y guión *@
+@helper MostrarRut(string rut)
+{
+    if (!string.IsNullOrWhiteSpace(rut))
+    {
+        var rutIn = decimal.Parse(rut.Substring(0, rut.Length - 1));
+        var dv = rut.Substring(rut.Length - 1);
+        <span>@rutIn.ToString("N0")-@dv</span>
+    }
+}

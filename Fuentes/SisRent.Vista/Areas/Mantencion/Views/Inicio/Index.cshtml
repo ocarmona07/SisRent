@@ -13,5 +13,42 @@
     </ol>
 </section>
 <section class="content">
-    @Html.ActionLink("Servicios", "Index", "Servicios", new { area = "Mantencion" }, new { })
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-key"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Reservas</span>
+                    <span class="info-box-number">@Model.Reservas</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-car"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Vehículos</span>
+                    <span class="info-box-number">@Model.Vehiculos</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-shopping-cart"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Servicios</span>
+                    <span class="info-box-number">@Model.Servicios</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-users"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Usuarios</span>
+                    <span class="info-box-number">@Model.Usuarios</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

@@ -45,8 +45,8 @@
                                 <td>@vehiculo.Detalles</td>
                                 <td>$ @vehiculo.Valor.ToString("N0")</td>
                                 <td>
-                                    <button class="btn btn-warning btnEditar" title="Editar" data-id="@vehiculo.IdVehiculo"><i class="fa fa-edit"></i></button>
-                                    <button class="btn @("btn-" + (vehiculo.Estado ? "success" : "danger")) btnEstado" title="@(vehiculo.Estado ? "Activado" : "Desactivado")" data-id="@vehiculo.IdVehiculo">
+                                    <button class="btn btn-warning btnEditar" title="Editar" value="@vehiculo.IdVehiculo"><i class="fa fa-edit"></i></button>
+                                    <button class="btn @("btn-" + (vehiculo.Estado ? "success" : "danger")) btnEstado" title="@(vehiculo.Estado ? "Activado" : "Desactivado")" value="@vehiculo.IdVehiculo">
                                         <i class="fa @("fa-" + (vehiculo.Estado ? "check" : "times"))"></i>
                                     </button>
                                 </td>
@@ -176,7 +176,7 @@
                 url: '@Url.Action("ObtenerVehiculo", "Vehiculos", new { area = "Mantencion" })',
                 type: 'POST',
                 data: {
-                    idVehiculo: $(this).attr("data-id")
+                    idVehiculo: $(this).val()
                 },
                 success: function(response) {
                     if (response.valid) {
@@ -297,7 +297,7 @@
                 url: '@Url.Action("CambiarEstado", "Vehiculos", new { area = "Mantencion" })',
                 type: 'POST',
                 data: {
-                    idVehiculo: $(this).attr("data-id"),
+                    idVehiculo: $(this).val(),
                     estado: !$(this).find("i").hasClass("fa-check")
                 },
                 success: function(response) {

@@ -15,6 +15,10 @@
         public List<Estados> Estados { get; set; }
         public List<ReservaServicio> ReservaServicios { get; set; }
 
+        public int Reservas { get; set; }
+        public int Vehiculos { get; set; }
+        public int Servicios { get; set; }
+        public int Usuarios { get; set; }
         public Dictionary<string, string> Lista { get; set; }
     }
 }

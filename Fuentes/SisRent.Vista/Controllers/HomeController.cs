@@ -1,6 +1,10 @@
 ﻿namespace SisRent.Vista.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Configuration;
+    using System.Net;
+    using System.Net.Mail;
     using System.Web.Mvc;
     using Models;
 
@@ -65,9 +69,38 @@
         public ActionResult EnviarCorreo(string titulo, string nombre, string correo,
             string mensaje)
         {
-            ViewBag.Correo = "Mensaje Enviado: " + titulo;
+            var model = string.Empty;
+            try
+            {
+                var correoEnvio = ConfigurationManager.AppSettings.Get("Mail:CorreoEnvio");
+                var passEnvio = ConfigurationManager.AppSettings.Get("Mail:PasswordEnvio");
+                var fromAddress = new MailAddress(correoEnvio, "From Name");
+                var toAddress = new MailAddress(correoEnvio, "To Name");
 
-            return RedirectToAction("Contacto");
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, passEnvio)
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = "VIA WEB: " + titulo,
+                    Body = mensaje
+                })
+                {
+                    smtp.Send(message);
+                }
+            }
+            catch (Exception e)
+            {
+                model = "Error al enviar correo: " + e.GetBaseException().Message;
+            }
+
+            return RedirectToAction("Contacto", model);
         }
     }
 }

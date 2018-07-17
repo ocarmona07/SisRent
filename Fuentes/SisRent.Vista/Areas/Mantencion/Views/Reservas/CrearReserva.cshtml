@@ -1,7 +1,328 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.ReservasViewModel
 @{
-    ViewBag.Title = "CrearReserva";
+    ViewBag.Title = "Crear Reserva";
+    var listaComunas = Model.ListaComunas;
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
+<section class="content-header">
+    <h1>
+        Reservas
+        <small>Crear reserva</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Reservas</li>
+        <li class="active">Crear reserva</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-danger">
+        <div class="box-header with-border">
+            <h3 class="box-title">Crear nueva reserva</h3>
+        </div>
+        <div class="box-body">
+            <div>
+                <p class="h4">1. Itinerario</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="ddlRetiro">Comuna de retiro</label>
+                            <select class="form-control select2" name="ddlRetiro" id="ddlRetiro">
+                                <option value="">Seleccione una comuna</option>
+                                @foreach (var item in listaComunas)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <div class="form-group">
+                            <label for="tbFechaRetiro">Fecha de retiro</label>
+                            <input type="text" class="form-control date" name="tbFechaRetiro" id="tbFechaRetiro" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbHoraRetiro">Hora de retiro</label>
+                            <input type="text" class="form-control time" name="tbHoraRetiro" id="tbHoraRetiro" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="ddlEntrega">Comuna de entrega</label>
+                            <select class="form-control select2" name="ddlEntrega" id="ddlEntrega">
+                                <option value="">Seleccione una comuna</option>
+                                @foreach (var item in listaComunas)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <div class="form-group">
+                            <label for="tbFechaEntrega">Fecha de entrega</label>
+                            <input type="text" class="form-control date" name="tbFechaEntrega" id="tbFechaEntrega" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbHoraEntrega">Hora de entrega</label>
+                            <input type="text" class="form-control time" name="tbHoraEntrega" id="tbHoraEntrega" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <p class="h4">2. Seleccione un vehículo</p>
+                <div class="btn-group vehiculo" data-toggle="buttons">
+                    @foreach (var vehiculo in Model.ListaVehiculos.Where(o => o.Estado))
+                    {
+                        <label class="btn thumbnail">
+                            <img src="@(urlBase + vehiculo.RutaImagen)" class="img-rounded img-responsive" alt="Imagen Auto" style="width: 340px;" />
+                            <span class="text-center">
+                                Marca: @vehiculo.Marca
+                                <br />Modelo: @vehiculo.Modelo
+                                <br />Año: @vehiculo.Anio
+                                <br /><strong>Valor diario: $ @vehiculo.Valor.ToString("N0").-</strong>
+                            </span>
+                            <input type="radio" name="vehiculos" id="@vehiculo.Patente" value="@vehiculo.IdVehiculo" data-valor="@vehiculo.Valor" class="hidden" autocomplete="off" />
+                        </label>
+                    }
+                </div>
+            </div>
+            <hr />
+            <div>
+                <p class="h4">3. Servicios adicionales</p>
+                <div class="btn-group checkbox servicios" data-toggle="buttons">
+                    @foreach (var servicio in Model.ListaServicios.Where(o => o.Estado))
+                    {
+                        <label class="btn btn-primary">
+                            <input type="checkbox" value="@servicio.IdServicio" data-valor="@servicio.Valor" name="servicios" class="hidden" autocomplete="off" />
+                            @servicio.Servicio $ @servicio.Valor.ToString("N0").-
+                        </label>
+                    }
+                </div>
+            </div>
+            <hr />
+            <div>
+                <p class="h4">4. Datos para el pago</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbNombres">Nombre(s)</label>
+                            <input type="text" class="form-control" name="tbNombres" id="tbNombres">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbApellidos">Apellido(s)</label>
+                            <input type="text" class="form-control" name="tbApellidos" id="tbApellidos">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbEmail">Email</label>
+                            <input type="text" class="form-control" name="tbEmail" id="tbEmail">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tbDireccion">Dirección</label>
+                            <input type="text" class="form-control" name="tbDireccion" id="tbDireccion">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="ddlComuna">Comuna</label>
+                            <select class="form-control select2" name="ddlComuna" id="ddlComuna">
+                                <option value="">Seleccione una comuna</option>
+                                @foreach (var item in listaComunas)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <div class="form-group">
+                            <label for="tbTelefono">Teléfono</label>
+                            <input type="text" class="form-control" name="tbTelefono" id="tbTelefono">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <button type="button" id="btnAceptar" name="btnAceptar" class="btn btn-lg btn-success">Calcular Total</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+</section>
+@section Styles
+{
+    @Styles.Render("~/Styles/select2")
+    @Styles.Render("~/Styles/datepicker")
+    @Styles.Render("~/Styles/timepicker")
+}
+@section Scripts
+{
+    @Scripts.Render("~/Scripts/select2")
+    @Scripts.Render("~/Scripts/datepicker")
+    @Scripts.Render("~/Scripts/timepicker")
+    <script>
+        function MostrarMensaje(mensaje) {
+            $("#modal-alerta .modal-body p").text(mensaje);
+            $("#modal-alerta").modal("show");
+        }
 
-<h2>CrearReserva</h2>
+        function CalcularTotal() {
+            var valorAuto = parseFloat($(".vehiculo input:radio:checked").attr("data-valor"));
+            if (isNaN(valorAuto)) {
+                MostrarMensaje("Debe seleccionar un vehículo");
+                $(".servicios input:checkbox").prop("checked", false);
+                $(".servicios label.active").removeClass("active");
+                return;
+            }
 
+            var valorServicios = 0;
+            $(".servicios input:checkbox:checked").each(function (i, item) {
+                valorServicios += parseFloat($(item).attr("data-valor"));
+            });
+
+            var total = valorAuto + valorServicios;
+            $("#btnAceptar").text("Total a pagar: $ " + total + ".-");
+        }
+
+        function LimpiarControles() {
+
+        }
+
+        $(document).ready(function () {
+            $(".select2").select2();
+
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy',
+                startDate: '0d',
+                todayHighlight: true,
+                autoclose: true
+            });
+
+            $(".time").timepicker({
+                minuteStep: 5,
+                showMeridian: false,
+                icons: {
+                    up: 'fa fa-caret-up',
+                    down: 'fa fa-caret-down'
+                },
+                disableFocus: false
+            });
+        });
+
+        $(document).on("click", ".servicios .btn,.vehiculo .thumbnail", function () {
+            var chk = $(this).find("input");
+            chk.prop("checked", (chk.attr("type") !== "radio" ? !chk.prop("checked") : true));
+            CalcularTotal();
+        });
+
+        $(document).on("click", "#btnAceptar", function () {
+            if (isNaN($(".vehiculo input:radio:checked").attr("data-valor"))) {
+                MostrarMensaje("Debe seleccionar un vehículo");
+                return;
+            }
+
+            if ($("#ddlRetiro").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de retiro");
+                return;
+            }
+            if ($("#tbFechaRetiro").val().length <= 0 || $("#tbHoraRetiro").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una fecha y hora de retiro");
+                return;
+            }
+            if ($("#ddlEntrega").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de entrega");
+                return;
+            }
+            if ($("#tbFechaEntrega").val().length <= 0 || $("#tbHoraEntrega").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una fecha y hora de entrega");
+                return;
+            }
+            if ($("#tbNombres").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un nombre para la reserva");
+                return;
+            }
+            if ($("#tbApellidos").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un apellido para la reserva");
+                return;
+            }
+            if ($("#tbEmail").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un correo para la reserva");
+                return;
+            }
+            if ($("#tbDireccion").val().length <= 0) {
+                MostrarMensaje("Debe ingresar una dirección para la reserva");
+                return;
+            }
+            if ($("#ddlComuna").val() === "") {
+                MostrarMensaje("Debe seleccionar una comuna de procedencia para la reserva");
+                return;
+            }
+            if ($("#tbTelefono").val().length <= 0) {
+                MostrarMensaje("Debe ingresar un teléfono de contacto para la reserva");
+                return;
+            }
+
+            CalcularTotal();
+
+            var servicios = new Array();
+            $(".servicios input:checkbox:checked").each(function (i, item) {
+                servicios.push(parseInt($(item).val()));
+            });
+
+            $.ajax({
+                url: '@Url.Action("NuevaReserva", "Reservas", new {area = "Mantencion"})',
+                type: 'POST',
+                traditional: true,
+                data: {
+                    comunaRetiro: $("#ddlRetiro").val(),
+                    fechaRetiro: $("#tbFechaRetiro").val(),
+                    horaRetiro: $("#tbHoraRetiro").val(),
+                    comunaEntrega: $("#ddlEntrega").val(),
+                    fechaEntrega: $("#tbFechaEntrega").val(),
+                    horaEntrega: $("#tbHoraEntrega").val(),
+                    idVehiculo: $(".vehiculo input:radio:checked").val(),
+                    servicios: servicios,
+                    nombres: $("#tbNombres").val(),
+                    apellidos: $("#tbApellidos").val(),
+                    email: $("#tbEmail").val(),
+                    direccion: $("#tbDireccion").val(),
+                    comuna: $("#ddlComuna").val(),
+                    telefono: $("#tbTelefono").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        MostrarMensaje("Reserva ingresada correctamente");
+                        $("#modal-alerta .modal-footer button").click(function() {
+                            window.location.href = '@Url.Action("Index", "Reservas", new {area = "Mantencion"})';
+                        });
+                    } else {
+                        MostrarMensaje("Error al crear la reserva");
+                    }
+                },
+                error: function() {
+                    MostrarMensaje("Error al crear la reserva");
+                }
+            });
+        });
+    </script>
+}

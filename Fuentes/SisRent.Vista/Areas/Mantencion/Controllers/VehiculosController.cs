@@ -1,6 +1,7 @@
 ﻿namespace SisRent.Vista.Areas.Mantencion.Controllers
 {
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
@@ -111,7 +112,8 @@
                 Anio = anio,
                 Valor = valor,
                 Patente = patente.ToUpper(),
-                RutaImagen = "/Images/SinImagen.png",
+                RutaImagen = 
+                    ConfigurationManager.AppSettings.Get("ImagesVehiculos") + "SinImagen.png",
                 Detalles = detalles,
                 Estado = estado
             };
@@ -194,13 +196,14 @@
             });
             if (vehiculo.EsValido && rutaImagen != null && Request.Files.Count > 0)
             {
+                var dir = ConfigurationManager.AppSettings.Get("ImagesVehiculos");
                 var veh = vehiculo.Vehiculo;
                 var nombreArchivo = string.Format("{0}_{1}_{2}{3}",
                     veh.VehModelos.Modelo, veh.Anio, veh.Patente,
                     Path.GetExtension(rutaImagen.FileName));
-                rutaImagen.SaveAs(Path.Combine(Server.MapPath("~/Images/"), nombreArchivo));
+                rutaImagen.SaveAs(Path.Combine(Server.MapPath("~" + dir), nombreArchivo));
 
-                vehiculo.Vehiculo.RutaImagen = "/Images/" + nombreArchivo;
+                vehiculo.Vehiculo.RutaImagen = dir + nombreArchivo;
                 new VehiculosBo().ActualizarVehiculo(new VehiculosRequest
                 {
                     Vehiculo = vehiculo.Vehiculo

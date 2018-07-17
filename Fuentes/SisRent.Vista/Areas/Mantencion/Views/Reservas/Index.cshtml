@@ -1,7 +1,112 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.ReservasViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Reservas";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
-
-<h2>Index</h2>
-
+<section class="content-header">
+    <h1>
+        Reservas
+        <small>Lista de reservas</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Reservas</li>
+        <li class="active">Lista de reservas</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-danger">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de reservas</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Comuna de Retiro</th>
+                        <th>Fecha/Hora de Retiro</th>
+                        <th>Comuna de Entrega</th>
+                        <th>Fecha/Hora de Entrega</th>
+                        <th>Vehículo</th>
+                        <th>Nombre Cliente</th>
+                        <th>Estado</th>
+                        <th style="width: 200px">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaReservas != null && Model.ListaReservas.Any())
+                    {
+                        foreach (var reserva in Model.ListaReservas)
+                        {
+                            <tr>
+                                <td>@reserva.ComunaRetiro</td>
+                                <td>@reserva.FechaHoraRetiro.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@reserva.ComunaEntrega</td>
+                                <td>@(reserva.FechaHoraEntrega != DateTime.MinValue ? reserva.FechaHoraEntrega.ToString("dd/MM/yyyy HH:mm") : null)</td>
+                                <td><span title="@reserva.Vehiculo.Marca - @reserva.Vehiculo.Modelo">@reserva.Vehiculo.Patente</span></td>
+                                <td>@reserva.Nombres @reserva.Apellidos</td>
+                                <td>@reserva.Estado</td>
+                                <td>
+                                    <button class="btn btn-primary btnDetalles" title="Detalles" value="@reserva.IdReserva"><i class="fa fa-key"></i></button>
+                                    <button class="btn btn-warning btnEditar" title="Editar" value="@reserva.IdReserva"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-success btnEstado" title="Cambiar estado" value="@reserva.IdReserva"><i class="fa fa-share"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="8">No hay reservas registradas</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <div class="pull-right">
+                <a href="@(urlBase + Url.Action("Rentar", "Home", new { area = "" }))" class="btn btn-success"><i class="fa fa-map-marker"></i> Agregar Reserva</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Servicio</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idServicio" name="idServicio" value="" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tbServicio">Servicio</label>
+                                <input type="text" class="form-control" name="servicio" id="tbServicio" placeholder="Silla para bebé" maxlength="32">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tbValor">Valor</label>
+                                <input type="number" class="form-control" name="valor" id="tbValor" placeholder="12300" min="0" max="10000000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbDescripcion">Descripción</label>
+                                <textarea class="form-control" name="descripcion" id="tbDescripcion" rows="3" placeholder="Marca Infanty..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnGuardarEditar" class="btn btn-success">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+</section>

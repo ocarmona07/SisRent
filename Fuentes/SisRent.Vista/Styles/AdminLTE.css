@@ -4975,3 +4975,19 @@ table.text-center th {
     white-space: normal !important;
   }
 }
+
+.vehiculo .active {
+    background-color: #dddddd;
+    border: 4px solid red;
+    border-radius: 12px;
+}
+
+.servicios .active {
+    background-color: #dd4b39;
+    border-color: #dc143c;
+}
+
+    .servicios .active:hover {
+        background-color: #a52a2a;
+        border-color: #dc143c;
+    }

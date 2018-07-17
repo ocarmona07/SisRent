@@ -160,6 +160,10 @@
     <Compile Include="Areas\Mantencion\Controllers\UsuariosController.cs" />
     <Compile Include="Areas\Mantencion\Controllers\VehiculosController.cs" />
     <Compile Include="Areas\Mantencion\MantencionAreaRegistration.cs" />
+    <Compile Include="Areas\Mantencion\Models\UsuariosViewModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\ReservasViewModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\ReservaModel.cs" />
+    <Compile Include="Areas\Mantencion\Models\UsuarioModel.cs" />
     <Compile Include="Models\ComboModel.cs" />
     <Compile Include="Areas\Mantencion\Models\ServicioModel.cs" />
     <Compile Include="Areas\Mantencion\Models\ServiciosViewModel.cs" />
@@ -179,16 +183,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\fontawesome-webfont.svg" />
-    <Content Include="Images\Aveo_2010_ABCD12.png" />
+    <Content Include="Images\308.png" />
+    <Content Include="Images\aveo.png" />
+    <Content Include="Images\Autos\Aveo_2010_ABCD12.png" />
     <Content Include="Images\bg.jpg" />
-    <Content Include="Images\HIUNDAI.png" />
-    <Content Include="Images\KIA.png" />
+    <Content Include="Images\elantra.png" />
     <Content Include="Images\logo.jpg" />
-    <Content Include="Images\NISSAN.png" />
-    <Content Include="Images\SinImagen.png" />
-    <Content Include="Images\user2-160x160.jpg" />
-    <Content Include="Images\user3-128x128.jpg" />
-    <Content Include="Images\user4-128x128.jpg" />
+    <Content Include="Images\Autos\SinImagen.png" />
+    <Content Include="Images\sportage.png" />
+    <Content Include="Images\Users\User.jpg" />
+    <Content Include="Images\versa.png" />
     <Content Include="Scripts\adminlte.js" />
     <Content Include="Scripts\adminlte.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />

@@ -339,7 +339,7 @@
                     if (response.valid) {
                         MostrarMensaje("Reserva ingresada correctamente");
                         $("#modal-alerta .modal-footer button").click(function() {
-                            window.location.href = '@Url.Action("CrearReserva")';
+                            window.location.href = '@Url.Action("Rentar")';
                         });
                     } else {
                         MostrarMensaje("Error al crear la reserva. Contacte al administrador");

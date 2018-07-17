@@ -132,8 +132,14 @@
                             });
                             $("#ddlModelo").val("").trigger('change');
                         } else {
-                            alert("Error: " + response.message);
+                            $("#modal-alerta .modal-body p").text(response.message);
+                            $("#modal-alerta").modal("show");
                         }
+                    },
+                    error: function (a, b, c) {
+                        $("#modal-alerta .modal-title").text("Error");
+                        $("#modal-alerta .modal-body p").text(c);
+                        $("#modal-alerta").modal("show");
                     }
                 });
             }
@@ -160,8 +166,14 @@
                         });
                         $("#modal-alerta").modal("show");
                     } else {
-                        alert("Error: " + response.message);
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
                     }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
                 }
             });
         });

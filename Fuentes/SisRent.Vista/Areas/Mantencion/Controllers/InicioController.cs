@@ -15,7 +15,7 @@
         // GET: Mantencion/Inicio
         public ActionResult Index()
         {
-            var notif = new Dictionary<string, string>();
+            //var notif = new Dictionary<string, string>();
             //notif.Add("users|aqua", "Texto de prueba");
             //notif.Add("warning|yellow", "Notificación de prueba");
             var usuario = new UsuariosBo().ObtenerUsuarioPorRut(new UsuariosRequest
@@ -30,7 +30,7 @@
                                         " " + usuario.ApMaterno,
                 ImagenUsuario = _urlBase + usuario.RutaImagen,
                 Rol = usuario.Roles.Rol,
-                Notificaciones = notif
+                Notificaciones = null//notif
             };
 
             var sidebar = new SidebarViewModel
@@ -39,10 +39,15 @@
             };
             Session["SidebarViewModel"] = sidebar;
 
+            var estados = new ListasBo().ObtenerEstadisticas();
             var model = new InicioViewModel
             {
                 Header = header,
-                Sidebar = sidebar
+                Sidebar = sidebar,
+                Reservas = estados.Reservas,
+                Vehiculos = estados.Vehiculos,
+                Servicios = estados.Servicios,
+                Usuarios = estados.Usuarios
             };
             Session["HeaderViewModel"] = header;
 

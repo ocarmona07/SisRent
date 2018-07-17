@@ -3,7 +3,7 @@ GO
 
 INSERT  INTO Usuarios
         ( Rut, Nombres, ApPaterno, ApMaterno, Telefono, Email, RutaImagen, IdRol, Clave, Estado )
-VALUES  ( '159888207', 'Omar', 'Carmona', 'Rivas', '987654321', 'ocarmona@gmail.com', '/Images/user2-160x160.jpg', 1, '123456', 1 )
+VALUES  ( '159888207', 'Omar', 'Carmona', 'Rivas', '987654321', 'ocarmona@gmail.com', '/Images/User.jpg', 1, '123456', 1 )
 GO
 
 INSERT  INTO Vehiculos

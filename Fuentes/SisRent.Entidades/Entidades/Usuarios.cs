@@ -38,7 +38,7 @@ namespace SisRent.Entidades.Entidades
         [StringLength(256)]
         public string RutaImagen { get; set; }
 
-        public int? IdRol { get; set; }
+        public int IdRol { get; set; }
 
         [Required]
         [StringLength(16)]

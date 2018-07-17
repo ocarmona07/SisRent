@@ -15,7 +15,7 @@
     </ol>
 </section>
 <section class="content">
-    <div class="box box-info">
+    <div class="box box-success">
         <div class="box-header with-border">
             <h3 class="box-title">Listado de servicios</h3>
         </div>
@@ -39,8 +39,8 @@
                                 <td>@servicio.Descripcion</td>
                                 <td>$ @servicio.Valor.ToString("N0")</td>
                                 <td>
-                                    <button class="btn btn-warning btnEditar" title="Editar" data-id="@servicio.IdServicio"><i class="fa fa-edit"></i></button>
-                                    <button class="btn @("btn-" + (servicio.Estado ? "success" : "danger")) btnEstado" title="@(servicio.Estado ? "Activado" : "Desactivado")" data-id="@servicio.IdServicio">
+                                    <button class="btn btn-warning btnEditar" title="Editar" value="@servicio.IdServicio"><i class="fa fa-edit"></i></button>
+                                    <button class="btn @("btn-" + (servicio.Estado ? "success" : "danger")) btnEstado" title="@(servicio.Estado ? "Activado" : "Desactivado")" value="@servicio.IdServicio">
                                         <i class="fa @("fa-" + (servicio.Estado ? "check" : "times"))"></i>
                                     </button>
                                 </td>
@@ -111,7 +111,7 @@
                 url: '@Url.Action("ObtenerServicio", "Servicios", new { area = "Mantencion" })',
                 type: 'POST',
                 data: {
-                    idServicio: $(this).attr("data-id")
+                    idServicio: $(this).val()
                 },
                 success: function(response) {
                     if (response.valid) {
@@ -169,7 +169,7 @@
                 url: '@Url.Action("CambiarEstado", "Servicios", new { area = "Mantencion" })',
                 type: 'POST',
                 data: {
-                    idServicio: $(this).attr("data-id"),
+                    idServicio: $(this).val(),
                     estado: !$(this).find("i").hasClass("fa-check")
                 },
                 success: function(response) {

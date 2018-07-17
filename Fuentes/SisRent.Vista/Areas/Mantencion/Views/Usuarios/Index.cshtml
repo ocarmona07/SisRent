@@ -1,7 +1,238 @@
-﻿
+﻿@model SisRent.Vista.Areas.Mantencion.Models.UsuariosViewModel
 @{
     ViewBag.Title = "Usuarios";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
+<section class="content-header">
+    <h1>
+        Usuarios
+        <small>Lista de usuarios</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-th"></i> Mantención</a></li>
+        <li>Usuarios</li>
+        <li class="active">Lista de usuarios</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de usuarios</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Imagen</th>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th style="width: 200px">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaUsuarios != null && Model.ListaUsuarios.Any())
+                    {
+                        foreach (var usuario in Model.ListaUsuarios)
+                        {
+                            <tr>
+                                <td><img class="img-responsive" src="@(urlBase + usuario.RutaImagen)" alt="Imagen Usuario"></td>
+                                <td>@WebControls.MostrarRut(usuario.Rut)</td>
+                                <td>@usuario.Nombres @usuario.ApPaterno @usuario.ApMaterno</td>
+                                <td>@usuario.Telefono</td>
+                                <td>@usuario.Email</td>
+                                <td>@usuario.Rol</td>
+                                <td>
+                                    <button class="btn btn-warning btnEditar" title="Editar" value="@usuario.IdUsuario"><i class="fa fa-edit"></i></button>
+                                    <button class="btn @("btn-" + (usuario.Estado ? "success" : "danger")) btnEstado" title="@(usuario.Estado ? "Activado" : "Desactivado")" value="@usuario.IdUsuario">
+                                        <i class="fa @("fa-" + (usuario.Estado ? "check" : "times"))"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="4">No hay servicios registrados</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <div class="pull-right">
+                <a href="@(urlBase + Url.Action("AgregarUsuario"))" class="btn btn-success"><i class="fa fa-user"></i> Agregar Usuario</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="frmGuardar" role="form" method="post" action="@Url.Action("SubirImagen", "Usuarios", new {area = "Mantencion"})" enctype="multipart/form-data">
+                        <input type="hidden" id="idUsuario" name="idUsuario" value="" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="tbNombres">Nombres</label>
+                                    <input type="text" class="form-control" name="nombres" id="tbNombres" placeholder="Omar" maxlength="32">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="tbApPaterno">Apellido Paterno</label>
+                                    <input type="text" class="form-control" name="apPaterno" id="tbApPaterno" placeholder="Carmona" maxlength="32">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="tbApMaterno">Apellido Materno</label>
+                                    <input type="text" class="form-control" name="apMaterno" id="tbApMaterno" placeholder="Rivas" maxlength="32">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="tbTelefono">Teléfono</label>
+                                    <input type="tel" class="form-control" name="telefono" id="tbTelefono" placeholder="987654321" maxlength="10">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="tbEmail">Email</label>
+                                    <input type="email" class="form-control" name="email" id="tbEmail" placeholder="alguien@hotmail.com" maxlength="64">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="ddlRol">Rol</label>
+                                    <select class="form-control select2" name="idRol" id="ddlRol">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach (var item in Model.ListaRoles)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="btnCambiarImagen">Imagen</label>
+                                    <input type="file" name="rutaImagen" id="btnCambiarImagen" style="width: 100%;" accept="image/*">
+                                    <p class="help-block">El tamaño óptimo es de 160x160</p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnGuardarEditar" class="btn btn-success">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+</section>
+@section Scripts
+{
+    <script>
+        $(document).on("click", ".btnEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerUsuario", "Usuarios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idUsuario: $(this).val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#idUsuario").val(response.usuario.IdUsuario);
+                        $("#tbNombres").val(response.usuario.Nombres);
+                        $("#tbApPaterno").val(response.usuario.ApPaterno);
+                        $("#tbApMaterno").val(response.usuario.ApMaterno);
+                        $("#tbTelefono").val(response.usuario.Telefono);
+                        $("#tbEmail").val(response.usuario.Email);
+                        $("#ddlRol").val(response.usuario.IdRol).trigger('change');
+                        $("#modal-editar").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
 
-<h2>Index</h2>
+        $(document).on("click", "#btnGuardarEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ActualizarUsuario", "Usuarios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idUsuario: $("#idUsuario").val(),
+                    nombres: $("#tbNombres").val(),
+                    apPaterno: $("#tbApPaterno").val(),
+                    apMaterno: $("#tbApMaterno").val(),
+                    telefono: $("#tbTelefono").val(),
+                    email: $("#tbEmail").val(),
+                    idRol: $("#ddlRol").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar").modal("hide");
+                        $("#modal-alerta .modal-body p").text("Usuario actualizado correctamente");
+                        $("#modal-alerta .modal-footer button").click(function () {
+                            $("#frmGuardar").submit();
+                        });
+                        $("#modal-alerta").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
 
+        $(document).on("click", ".btnEstado", function() {
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Usuarios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idUsuario: $(this).val(),
+                    estado: !$(this).find("i").hasClass("fa-check")
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        window.location.href = '@Url.Action("Index", "Usuarios", new { area = "Mantencion" })';
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+    </script>
+}
