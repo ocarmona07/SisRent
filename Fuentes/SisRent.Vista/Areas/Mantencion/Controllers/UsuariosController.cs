@@ -82,7 +82,7 @@
                 Email = email,
                 RutaImagen = ConfigurationManager.AppSettings.Get("ImagesUsuarios") + "User.jpg",
                 IdRol = idRol,
-                Clave = rut.Replace(".", "").Replace("-", ""),
+                Clave = ConfigurationManager.AppSettings.Get("ClaveDefecto"),
                 Estado = false
             };
 
@@ -130,8 +130,6 @@
                 usuario.Usuario.ApMaterno = apMaterno;
                 usuario.Usuario.Telefono = telefono;
                 usuario.Usuario.Email = email;
-                usuario.Usuario.RutaImagen = 
-                    ConfigurationManager.AppSettings.Get("ImagesUsuarios") + "User.jpg";
                 usuario.Usuario.IdRol = idRol;
                 var cambio = new UsuariosBo().ActualizarUsuario(new UsuariosRequest
                 {
@@ -194,6 +192,45 @@
             if (usuario.EsValido)
             {
                 usuario.Usuario.Estado = estado;
+                var cambio = new UsuariosBo().ActualizarUsuario(new UsuariosRequest
+                {
+                    Usuario = usuario.Usuario
+                });
+                if (!cambio.EsValido)
+                {
+                    response = new
+                    {
+                        valid = false,
+                        message = cambio.MensajeError
+                    };
+                }
+            }
+            else
+            {
+                response = new
+                {
+                    valid = false,
+                    message = usuario.MensajeError
+                };
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ResetClave(int idUsuario)
+        {
+            var response = new
+            {
+                valid = true,
+                message = ""
+            };
+            var usuario = new UsuariosBo().ObtenerUsuario(new UsuariosRequest
+            {
+                IdUsuario = idUsuario
+            });
+            if (usuario.EsValido)
+            {
+                usuario.Usuario.Clave = ConfigurationManager.AppSettings.Get("ClaveDefecto");
                 var cambio = new UsuariosBo().ActualizarUsuario(new UsuariosRequest
                 {
                     Usuario = usuario.Usuario

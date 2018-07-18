@@ -9,5 +9,6 @@
         public List<ComboModel> ListaComunas { get; set; }
         public List<ServicioModel> ListaServicios { get; set; }
         public List<VehiculoModel> ListaVehiculos { get; set; }
+        public List<ComboModel> ListaEstados { get; set; }
     }
 }

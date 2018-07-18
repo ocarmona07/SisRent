@@ -164,6 +164,7 @@
     <Compile Include="Areas\Mantencion\Models\ReservasViewModel.cs" />
     <Compile Include="Areas\Mantencion\Models\ReservaModel.cs" />
     <Compile Include="Areas\Mantencion\Models\UsuarioModel.cs" />
+    <Compile Include="Controllers\MantencionController.cs" />
     <Compile Include="Models\ComboModel.cs" />
     <Compile Include="Areas\Mantencion\Models\ServicioModel.cs" />
     <Compile Include="Areas\Mantencion\Models\ServiciosViewModel.cs" />
@@ -350,6 +351,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Rentar.cshtml" />
     <Content Include="Views\Home\Partials\TerminosPartial.cshtml" />
+    <Content Include="Views\Mantencion\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

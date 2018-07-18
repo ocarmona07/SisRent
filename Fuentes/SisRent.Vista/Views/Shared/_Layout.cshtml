@@ -1,5 +1,4 @@
 ﻿@{
-
     // *** Preconfigs ***
     var version = System.Configuration.ConfigurationManager.AppSettings.Get("Version");
 }
@@ -39,7 +38,7 @@
                             <li><a href="@Url.Action("Rentar", "Home")"><p>Rentar Vehículo</p></a></li>
                             <li><a href="@Url.Action("Informacion", "Home")"><p>Información</p></a></li>
                             <li><a href="@Url.Action("Contacto", "Home")"><p>Contacto</p></a></li>
-                            <li><a href="@Url.Action("Index", "Inicio", new { area = "Mantencion" })"><p>Mantención</p></a></li>
+                            <li><a href="@Url.Action("Index", "Mantencion")"><p>Mantención</p></a></li>
                         </ul>
                     </div>
                 </div>

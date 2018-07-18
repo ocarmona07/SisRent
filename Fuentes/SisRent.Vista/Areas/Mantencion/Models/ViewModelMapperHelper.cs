@@ -224,11 +224,18 @@
                     IdComunaRetiro = item.Reserva.IdComunaRetiro,
                     ComunaRetiro = item.Reserva.Comunas.Comuna,
                     FechaHoraRetiro = item.Reserva.FechaRetiro,
+                    FechaRetiro = item.Reserva.FechaRetiro.ToString("dd/MM/yyyy"),
+                    HoraRetiro = item.Reserva.FechaRetiro.ToString("HH:mm"),
                     IdComunaEntrega = item.Reserva.IdComunaEntrega,
                     ComunaEntrega = item.Reserva.Comunas1.Comuna,
                     FechaHoraEntrega = item.Reserva.FechaEntrega ?? DateTime.MinValue,
+                    FechaEntrega = item.Reserva.FechaEntrega.HasValue ?
+                        item.Reserva.FechaEntrega.Value.ToString("dd/MM/yyyy") : "",
+                    HoraEntrega = item.Reserva.FechaEntrega.HasValue  ?
+                        item.Reserva.FechaEntrega.Value.ToString("HH:mm") : "",
                     IdVehiculo = item.Reserva.IdVehiculo,
                     Vehiculo = ObtenerVehiculo(item.Reserva.IdVehiculo),
+                    Servicios = ObtenerServiciosReserva(idReserva),
                     Nombres = item.Reserva.Nombres,
                     Apellidos = item.Reserva.Apellidos,
                     Email = item.Reserva.Email,
@@ -243,6 +250,44 @@
                     Usuario = ObtenerUsuario(item.Reserva.IdUsuario),
                     Observaciones = item.Reserva.Observaciones
                 };
+            }
+
+            return response;
+        }
+
+        public List<ServicioModel> ObtenerServiciosReserva(int idReserva)
+        {
+            var response = new List<ServicioModel>();
+            var lista = new ReservaServiciosBo().ObtenerReservaServiciosPorIdReserva(new ReservaServiciosRequest
+            {
+                IdReserva = idReserva
+            });
+            if (lista.EsValido)
+            {
+                response = lista.ReservaServicios.Select(o => new ServicioModel
+                {
+                    IdServicio = o.IdServicio,
+                    Servicio = o.Servicios.Servicio,
+                    Descripcion = o.Servicios.Descripcion,
+                    Valor = o.Servicios.Valor,
+                    Estado = o.Servicios.Estado
+                }).ToList();
+            }
+
+            return response;
+        }
+
+        public List<ComboModel> ListaEstados()
+        {
+            var response = new List<ComboModel>();
+            var lista = new ListasBo().ObtenerEstados();
+            if (lista.EsValido)
+            {
+                response = lista.Estados.Select(o => new ComboModel
+                {
+                    Text = o.Estado,
+                    Value = o.IdEstado.ToString()
+                }).ToList();
             }
 
             return response;
@@ -320,6 +365,25 @@
                 Email = usuario.Email,
                 RutaImagen = usuario.RutaImagen,
                 IdRol = usuario.IdRol,
+                Clave = usuario.Clave,
+                Estado = usuario.Estado
+            };
+        }
+
+        public UsuarioModel CrearUsuarioModel(Usuarios usuario)
+        {
+            return new UsuarioModel
+            {
+                IdUsuario = usuario.IdUsuario,
+                Rut = usuario.Rut,
+                Nombres = usuario.Nombres,
+                ApPaterno = usuario.ApPaterno,
+                ApMaterno = usuario.ApMaterno,
+                Telefono = usuario.Telefono,
+                Email = usuario.Email,
+                RutaImagen = usuario.RutaImagen,
+                IdRol = usuario.IdRol,
+                Rol = usuario.Roles.Rol,
                 Clave = usuario.Clave,
                 Estado = usuario.Estado
             };

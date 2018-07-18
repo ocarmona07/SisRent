@@ -1,6 +1,7 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.ReservasViewModel
 @{
     ViewBag.Title = "Reservas";
+    var listaComunas = Model.ListaComunas;
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
 <section class="content-header">
@@ -49,7 +50,7 @@
                                 <td>
                                     <button class="btn btn-primary btnDetalles" title="Detalles" value="@reserva.IdReserva"><i class="fa fa-key"></i></button>
                                     <button class="btn btn-warning btnEditar" title="Editar" value="@reserva.IdReserva"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-success btnEstado" title="Cambiar estado" value="@reserva.IdReserva"><i class="fa fa-share"></i></button>
+                                    <button class="btn btn-success btnEstado" title="Cambiar estado" value="@reserva.IdReserva" data-estado="@reserva.IdEstado"><i class="fa fa-share"></i></button>
                                 </td>
                             </tr>
                         }
@@ -67,6 +68,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="idReserva" name="idReserva" value="" />
     <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -74,29 +76,138 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Editar Servicio</h4>
+                    <h4 class="modal-title">Editar Reserva</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="idServicio" name="idServicio" value="" />
+                    <p class="h4">1. Itinerario</p>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label for="tbServicio">Servicio</label>
-                                <input type="text" class="form-control" name="servicio" id="tbServicio" placeholder="Silla para bebé" maxlength="32">
+                                <label for="ddlRetiro">Comuna de retiro</label>
+                                <select class="form-control select2" name="ddlRetiro" id="ddlRetiro">
+                                    <option value="">Seleccione una comuna</option>
+                                    @foreach (var item in listaComunas)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4 col-md-offset-1">
                             <div class="form-group">
-                                <label for="tbValor">Valor</label>
-                                <input type="number" class="form-control" name="valor" id="tbValor" placeholder="12300" min="0" max="10000000">
+                                <label for="tbFechaRetiro">Fecha de retiro</label>
+                                <input type="text" class="form-control date" name="tbFechaRetiro" id="tbFechaRetiro" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbHoraRetiro">Hora de retiro</label>
+                                <input type="text" class="form-control time" name="tbHoraRetiro" id="tbHoraRetiro" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="ddlEntrega">Comuna de entrega</label>
+                                <select class="form-control select2" name="ddlEntrega" id="ddlEntrega">
+                                    <option value="">Seleccione una comuna</option>
+                                    @foreach (var item in listaComunas)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label for="tbFechaEntrega">Fecha de entrega</label>
+                                <input type="text" class="form-control date" name="tbFechaEntrega" id="tbFechaEntrega" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbHoraEntrega">Hora de entrega</label>
+                                <input type="text" class="form-control time" name="tbHoraEntrega" id="tbHoraEntrega" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <p class="h4">2. Seleccione un vehículo</p>
+                    <div class="form-group">
+                        <label for="ddlVehiculo">Vehículo</label>
+                        <select class="form-control select2" name="idVehiculo" id="ddlVehiculo">
+                            <option value="">Seleccione un vehículo</option>
+                            @foreach (var item in Model.ListaVehiculos.Where(o => o.Estado))
+                            {
+                                <option value="@item.IdVehiculo">@item.Marca-@item.Modelo @item.Patente $@item.Valor.ToString("N0").-</option>
+                            }
+                        </select>
+                    </div>
+                    <hr />
+                    <p class="h4">3. Servicios adicionales</p>
+                    <div class="btn-group checkbox servicios" data-toggle="buttons">
+                        @foreach (var servicio in Model.ListaServicios.Where(o => o.Estado))
+                        {
+                            <label class="btn btn-primary">
+                                <input type="checkbox" value="@servicio.IdServicio" data-valor="@servicio.Valor" name="servicios" class="hidden" autocomplete="off" />
+                                @servicio.Servicio $ @servicio.Valor.ToString("N0").-
+                            </label>
+                        }
+                    </div>
+                    <hr />
+                    <p class="h4">4. Datos para el pago</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbNombres">Nombre(s)</label>
+                                <input type="text" class="form-control" name="tbNombres" id="tbNombres">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbApellidos">Apellido(s)</label>
+                                <input type="text" class="form-control" name="tbApellidos" id="tbApellidos">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbEmail">Email</label>
+                                <input type="text" class="form-control" name="tbEmail" id="tbEmail">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDireccion">Dirección</label>
+                                <input type="text" class="form-control" name="tbDireccion" id="tbDireccion">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="ddlComuna">Comuna</label>
+                                <select class="form-control select2" name="ddlComuna" id="ddlComuna">
+                                    <option value="">Seleccione una comuna</option>
+                                    @foreach (var item in listaComunas)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label for="tbTelefono">Teléfono</label>
+                                <input type="text" class="form-control" name="tbTelefono" id="tbTelefono">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="tbDescripcion">Descripción</label>
-                                <textarea class="form-control" name="descripcion" id="tbDescripcion" rows="3" placeholder="Marca Infanty..."></textarea>
+                                <label for="tbObservacionesEdit">Observaciones</label>
+                                <textarea class="form-control" name="observaciones" id="tbObservacionesEdit" rows="3" placeholder="Comentarios..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -108,5 +219,170 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-cambioEstado" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Cambiar estado de la reserva</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ddlEstado">Estado</label>
+                                <select class="form-control" name="idEstado" id="ddlEstado">
+                                    <option value="">Seleccione un estado</option>
+                                    @foreach (var item in Model.ListaEstados)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbObservaciones">Observaciones</label>
+                                <textarea class="form-control" name="observaciones" id="tbObservaciones" rows="3" placeholder="Comentarios..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnCambioEstado">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @WebControls.ModalAlert("Mensaje Alerta", "")
 </section>
+@section Scripts
+{
+    <script>
+        $(document).on("click", ".btnEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerReserva", "Reservas", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idReserva: $(this).val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#idReserva").val(response.reserva.IdReserva);
+                        // 1. Itinerario
+                        $("#ddlRetiro").val(response.reserva.IdComunaRetiro);
+                        $("#tbFechaRetiro").val(response.reserva.FechaRetiro);
+                        $("#tbHoraRetiro").val(response.reserva.HoraRetiro);
+                        $("#ddlEntrega").val(response.reserva.IdComunaEntrega);
+                        $("#tbFechaEntrega").val(response.reserva.FechaEntrega);
+                        $("#tbHoraEntrega").val(response.reserva.HoraEntrega);
+                        // 2. Seleccione un vehículo
+                        $("#ddlVehiculo").val(response.reserva.IdVehiculo);
+                        // 3. Servicios adicionales
+                        $.each(response.reserva.Servicios, function(i, item) {
+                            $('.servicios input:checkbox[value="' + item.IdServicio + '"]').prop("checked", true);
+                            $('.servicios input:checkbox[value="' + item.IdServicio + '"]').addClass("active");
+                        });
+                        // 4. Datos para el pago
+                        $("#tbNombres").val(response.reserva.Nombres);
+                        $("#tbApellidos").val(response.reserva.Apellidos);
+                        $("#tbEmail").val(response.reserva.Email);
+                        $("#tbDireccion").val(response.reserva.Direccion);
+                        $("#ddlComuna").val(response.reserva.IdComuna);
+                        $("#tbTelefono").val(response.reserva.Telefono);
+                        $("#tbObservacionesEdit").val(response.reserva.Observaciones);
+
+                        $("#modal-editar").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+
+        $(document).on("click", "btnGuardarEditar", function () {
+            $.ajax({
+                url: '@Url.Action("ActualizarServicio", "Servicios", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idServicio: $("#idServicio").val(),
+                    nombre: $("#tbServicio").val(),
+                    descripcion: $("#tbDescripcion").val(),
+                    valor: $("#tbValor").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-editar").modal("hide");
+                        $("#modal-alerta .modal-body p").text("Servicio actualizado correctamente");
+                        $("#modal-alerta .modal-footer button").click(function () {
+                            window.location.href = '@Url.Action("Index", "Servicios", new { area = "Mantencion" })';
+                        });
+                        $("#modal-alerta").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+
+        $(document).on("click", ".btnEstado", function() {
+            $("#idReserva").val($(this).val());
+            $("#ddlEstado").val($(this).attr("data-estado"));
+            $("#tbObservaciones").val("");
+            $("#modal-cambioEstado").modal("show");
+        });
+
+        $(document).on("click", "#btnCambioEstado", function() {
+            if ($("#ddlEstado").val() === "") {
+                $("#modal-alerta .modal-body p").text("Debe seleccionar un estado para la reserva");
+                $("#modal-alerta").modal("show");
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("CambiarEstado", "Reservas", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idReserva: $("#idReserva").val(),
+                    idEstado: $("#ddlEstado").val(),
+                    observaciones: $("#tbObservaciones").val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#modal-cambioEstado").modal("hide");
+                        $("#modal-alerta .modal-body p").text("Estado de la reserva actualizado correctamente");
+                        $("#modal-alerta .modal-footer button").click(function () {
+                            window.location.href = '@Url.Action("Index", "Reservas", new { area = "Mantencion" })';
+                        });
+                        $("#modal-alerta").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+    </script>
+}

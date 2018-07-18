@@ -1,6 +1,7 @@
 ﻿namespace SisRent.Vista.Areas.Mantencion.Models
 {
     using System;
+    using System.Collections.Generic;
 
     public class ReservaModel
     {
@@ -8,11 +9,16 @@
         public int IdComunaRetiro { get; set; }
         public string ComunaRetiro { get; set; }
         public DateTime FechaHoraRetiro { get; set; }
+        public string FechaRetiro { get; set; }
+        public string HoraRetiro { get; set; }
         public int? IdComunaEntrega { get; set; }
         public string ComunaEntrega { get; set; }
         public DateTime FechaHoraEntrega { get; set; }
+        public string FechaEntrega { get; set; }
+        public string HoraEntrega { get; set; }
         public int IdVehiculo { get; set; }
         public VehiculoModel Vehiculo { get; set; }
+        public List<ServicioModel> Servicios { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Email { get; set; }

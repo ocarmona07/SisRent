@@ -1,4 +1,8 @@
-﻿namespace SisRent.Vista.Controllers
+﻿using SisRent.Entidades.Request;
+using SisRent.Negocio.Admin;
+using SisRent.Vista.Areas.Mantencion.Models;
+
+namespace SisRent.Vista.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -52,12 +56,9 @@
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult Informacion()
         {
-            ViewBag.Message = "Información";
-
             return View();
         }
 
@@ -101,6 +102,35 @@
             }
 
             return RedirectToAction("Contacto", model);
+        }
+
+        [HttpPost]
+        public JsonResult Login(string usuario, string clave)
+        {
+            var response = new
+            {
+                valid = false,
+                message = ""
+            };
+            usuario = usuario.Replace(".", "").Replace("-", "");
+            //clave = Convert.FromBase64String(clave);
+            var dataUsuario = new UsuariosBo().ObtenerUsuarioPorRut(new UsuariosRequest
+            {
+                RutUsuario = usuario
+            });
+            if (dataUsuario.EsValido && dataUsuario.Usuario.Estado &&
+                clave.Equals(dataUsuario.Usuario.Clave))
+            {
+                Session["DataUsuario"] = new Areas.Mantencion.Models.ViewModelMapperHelper()
+                    .CrearUsuarioModel(dataUsuario.Usuario);
+                response = new
+                {
+                    valid = true,
+                    message = ""
+                };
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

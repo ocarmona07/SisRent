@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Mantención";
+    var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
+}
+<div class="text-center text-blue">
+    <h2><strong>INICIAR SESIÓN</strong></h2>
+</div>
+<hr />
+<div class="form-horizontal" style="padding: 80px 0;">
+    <div class="form-group">
+        <label for="usuario" class="col-sm-5 control-label">Usuario</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="usuario" id="usuario" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="clave" class="col-sm-5 control-label">Contraseña</label>
+        <div class="col-sm-7">
+            <input type="password" class="form-control" name="clave" id="clave" required>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 30px;">
+        <div class="col-md-2 col-md-offset-5">
+            <button type="button" class="btn btn-lg btn-block btn-success" id="btnIngresar">Ingresar</button>
+        </div>
+    </div>
+</div>
+@WebControls.ModalAlert("Mensaje Alerta", "")
+@section scripts
+{
+    <script>
+    $("#btnIngresar").click(function () {
+        $.ajax({
+            url: '@(urlBase + Url.Action("Login", "Home", new { area = "" }))',
+            type: 'POST',
+            traditional: true,
+            data: {
+                usuario: $("#usuario").val(),
+                clave: $("#clave").val()
+            },
+            success: function (response) {
+                if (response.valid) {
+                    window.location.href = '@Url.Action("Index", "Inicio", new { area = "Mantencion" })';
+                } else {
+                    $("#modal-alerta .modal-body p").text("Usuario o contraseña incorrecta");
+                    $("#modal-alerta").modal("show");
+                }
+            },
+            error: function (a, b, c) {
+                $("#modal-alerta .modal-title").text("Error");
+                $("#modal-alerta .modal-body p").text(c);
+                $("#modal-alerta").modal("show");
+            }
+        });
+    });
+    </script>
+}
