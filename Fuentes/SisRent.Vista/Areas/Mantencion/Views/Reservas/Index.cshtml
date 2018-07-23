@@ -69,6 +69,126 @@
         </div>
     </div>
     <input type="hidden" id="idReserva" name="idReserva" value="" />
+    <div class="modal fade" id="modal-detalle" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Detalle Reserva</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="h4">1. Itinerario</p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="tbDetRetiro">Comuna de retiro</label>
+                                <input type="text" class="form-control" name="tbDetRetiro" id="tbDetRetiro" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label for="tbDetFechaRetiro">Fecha de retiro</label>
+                                <input type="text" class="form-control" name="tbDetFechaRetiro" id="tbDetFechaRetiro" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetHoraRetiro">Hora de retiro</label>
+                                <input type="text" class="form-control" name="tbDetHoraRetiro" id="tbDetHoraRetiro" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="tbDetEntrega">Comuna de entrega</label>
+                                <input type="text" class="form-control" name="tbDetEntrega" id="tbDetEntrega" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label for="tbDetFechaEntrega">Fecha de entrega</label>
+                                <input type="text" class="form-control" name="tbDetFechaEntrega" id="tbDetFechaEntrega" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetHoraEntrega">Hora de entrega</label>
+                                <input type="text" class="form-control" name="tbDetHoraEntrega" id="tbDetHoraEntrega" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <p class="h4">2. Vehículo</p>
+                    <div class="form-group">
+                        <label for="tbDetVehiculo">Vehículo</label>
+                        <input type="text" class="form-control" name="tbDetVehiculo" id="tbDetVehiculo" readonly="readonly">
+                    </div>
+                    <hr />
+                    <p class="h4">3. Servicios adicionales</p>
+                    <div class="btn-group servicios">
+                        <ul id="detServicios">
+                        </ul>
+                    </div>
+                    <hr />
+                    <p class="h4">4. Datos para el pago</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetNombres">Nombre(s)</label>
+                                <input type="text" class="form-control" name="tbDetNombres" id="tbDetNombres" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetApellidos">Apellido(s)</label>
+                                <input type="text" class="form-control" name="tbDetApellidos" id="tbDetApellidos" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetEmail">Email</label>
+                                <input type="text" class="form-control" name="tbDetEmail" id="tbDetEmail" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tbDetDireccion">Dirección</label>
+                                <input type="text" class="form-control" name="tbDetDireccion" id="tbDetDireccion" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="tbDetComuna">Comuna</label>
+                                <input type="text" class="form-control" name="tbDetComuna" id="tbDetComuna" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="form-group">
+                                <label for="tbDetTelefono">Teléfono</label>
+                                <input type="text" class="form-control" name="tbDetTelefono" id="tbDetTelefono" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbDetObservaciones">Observaciones</label>
+                                <textarea class="form-control" name="tbDetObservaciones" id="tbDetObservaciones" rows="3" readonly="readonly"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modal-editar" data-keyboard="disable" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -264,6 +384,54 @@
 @section Scripts
 {
     <script>
+        $(document).on("click", ".btnDetalles", function () {
+            $.ajax({
+                url: '@Url.Action("ObtenerReserva", "Reservas", new { area = "Mantencion" })',
+                type: 'POST',
+                data: {
+                    idReserva: $(this).val()
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $("#idReserva").val(response.reserva.IdReserva);
+                        // 1. Itinerario
+                        $("#tbDetRetiro").val(response.reserva.ComunaRetiro);
+                        $("#tbDetFechaRetiro").val(response.reserva.FechaRetiro);
+                        $("#tbDetHoraRetiro").val(response.reserva.HoraRetiro);
+                        $("#tbDetEntrega").val(response.reserva.ComunaEntrega);
+                        $("#tbDetFechaEntrega").val(response.reserva.FechaEntrega);
+                        $("#tbDetHoraEntrega").val(response.reserva.HoraEntrega);
+                        // 2. Seleccione un vehículo
+                        $("#tbDetVehiculo").val("Marca-Modelo: " + response.reserva.Vehiculo.Marca + " - " + response.reserva.Vehiculo.Modelo +
+                            ", Año: " + response.reserva.Vehiculo.Anio + ", Patente: " + response.reserva.Vehiculo.Patente);
+                        // 3. Servicios adicionales
+                        $("#detServicios").empty();
+                        $.each(response.reserva.Servicios, function(i, item) {
+                            $("#detServicios").append("<li>" + item.Servicio + " $ " + item.Valor + ".-</li>");
+                        });
+                        // 4. Datos para el pago
+                        $("#tbDetNombres").val(response.reserva.Nombres);
+                        $("#tbDetApellidos").val(response.reserva.Apellidos);
+                        $("#tbDetEmail").val(response.reserva.Email);
+                        $("#tbDetDireccion").val(response.reserva.Direccion);
+                        $("#tbDetComuna").val(response.reserva.Comuna);
+                        $("#tbDetTelefono").val(response.reserva.Telefono);
+                        $("#tbDetObservaciones").val(response.reserva.Observaciones);
+
+                        $("#modal-detalle").modal("show");
+                    } else {
+                        $("#modal-alerta .modal-body p").text(response.message);
+                        $("#modal-alerta").modal("show");
+                    }
+                },
+                error: function (a, b, c) {
+                    $("#modal-alerta .modal-title").text("Error");
+                    $("#modal-alerta .modal-body p").text(c);
+                    $("#modal-alerta").modal("show");
+                }
+            });
+        });
+
         $(document).on("click", ".btnEditar", function () {
             $.ajax({
                 url: '@Url.Action("ObtenerReserva", "Reservas", new { area = "Mantencion" })',

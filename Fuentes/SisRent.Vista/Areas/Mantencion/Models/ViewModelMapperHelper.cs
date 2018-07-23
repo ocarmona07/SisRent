@@ -51,7 +51,9 @@
                 {
                     IdVehiculo = item.Vehiculo.IdVehiculo,
                     IdMarca = item.Vehiculo.VehModelos.IdMarca,
+                    Marca = item.Vehiculo.VehModelos.VehMarcas.Marca,
                     IdModelo = item.Vehiculo.IdModelo,
+                    Modelo = item.Vehiculo.VehModelos.Modelo,
                     Anio = item.Vehiculo.Anio,
                     Valor = item.Vehiculo.Valor,
                     Patente = item.Vehiculo.Patente,
