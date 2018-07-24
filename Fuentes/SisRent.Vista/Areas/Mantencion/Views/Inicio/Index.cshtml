@@ -52,3 +52,110 @@
         </div>
     </div>
 </section>
+@if (Model.CambiarClave)
+{
+    <div class="modal fade" id="modal-cambiarClave" data-keyboard="disable" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Cambiar clave de usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbClaveActual">Clave actual</label>
+                                <input type="password" class="form-control" name="claveActual" id="tbClaveActual" maxlength="20" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbClaveNueva">Clave nueva</label>
+                                <input type="password" class="form-control" name="claveNueva" id="tbClaveNueva" maxlength="20" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tbRepiteClave">Reingresar clave nueva</label>
+                                <input type="password" class="form-control" name="repiteClave" id="tbRepiteClave" maxlength="20" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="btnCambiarClave">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @WebControls.ModalAlert("Mensaje Alerta", "")
+    @section Scripts
+    {
+        <script type="text/javascript">
+        $("#btnCambiarClave").click(function() {
+            if ($("#tbClaveActual").val().length <= 0) {
+                $("#modal-alerta .modal-body p").text("Debe ingresar la contraseña actual");
+                $("#modal-alerta").modal("show");
+                return;
+            } else if ($("#tbClaveNueva").val().length <= 0) {
+                $("#modal-alerta .modal-body p").text("Debe ingresar una contraseña nueva");
+                $("#modal-alerta").modal("show");
+                return;
+            } else if ($("#tbRepiteClave").val().length <= 0) {
+                $("#modal-alerta .modal-body p").text("Debe reingresar la clave nueva");
+                $("#modal-alerta").modal("show");
+                return;
+            }
+
+            if ($("#tbClaveNueva").val() !== $("#tbRepiteClave").val()) {
+                $("#modal-alerta .modal-body p").text("Las claves nueva y reingreso no coinciden");
+                $("#modal-alerta").modal("show");
+                return;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("CambioClave", "Inicio", new {area = "Mantencion"})',
+                    type: 'POST',
+                    data: {
+                        claveActual: $("#tbClaveActual").val(),
+                        claveNueva: $("#tbClaveNueva").val()
+                    },
+                    success: function(response) {
+                        $("#modal-cambiarClave").modal("hide");
+                        if (response.valid) {
+                            $("#modal-alerta .modal-body p").text("La clave se ha cambiado correctamente. Debe reingresar al sitio.");
+                            $("#modal-alerta .modal-content button").click(function () {
+                                window.location.href = '@Url.Action("CerrarSesion", "Inicio", new { area = "Mantencion" })';
+                            });
+                            $("#modal-alerta").modal("show");
+                        } else {
+                            $("#modal-alerta .modal-body p").text("Error al cambiar la clave: " + response.message);
+                            $("#modal-alerta").modal("show");
+                        }
+                    },
+                    error: function(a, b, c) {
+                        $("#modal-cambiarClave").modal("hide");
+                        $("#modal-alerta .modal-body p").text("Error al cambiar la clave: " + c);
+                        $("#modal-alerta").modal("show");
+                    }
+                });
+            }
+
+            $("#tbClaveActual").val();
+            $("#tbClaveNueva").val();
+            $("#tbRepiteClave").val();
+        });
+
+        $(document).ready(function() {
+            $("#modal-cambiarClave").modal("show");
+        });
+        </script>
+    }
+}

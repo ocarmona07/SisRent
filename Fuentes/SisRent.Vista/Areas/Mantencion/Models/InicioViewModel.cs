@@ -10,5 +10,6 @@
         public int Vehiculos { get; set; }
         public int Servicios { get; set; }
         public int Usuarios { get; set; }
+        public bool CambiarClave { get; set; }
     }
 }

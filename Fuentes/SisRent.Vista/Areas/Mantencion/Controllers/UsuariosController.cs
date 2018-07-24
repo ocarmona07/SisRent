@@ -7,6 +7,7 @@
     using Entidades.Request;
     using Models;
     using Negocio.Admin;
+    using Negocio.Common;
 
     public class UsuariosController : Controller
     {
@@ -82,7 +83,7 @@
                 Email = email,
                 RutaImagen = ConfigurationManager.AppSettings.Get("ImagesUsuarios") + "User.jpg",
                 IdRol = idRol,
-                Clave = ConfigurationManager.AppSettings.Get("ClaveDefecto"),
+                Clave = CommonBo.Base64Encode(ConfigurationManager.AppSettings.Get("ClaveDefecto")),
                 Estado = false
             };
 
@@ -230,7 +231,7 @@
             });
             if (usuario.EsValido)
             {
-                usuario.Usuario.Clave = ConfigurationManager.AppSettings.Get("ClaveDefecto");
+                usuario.Usuario.Clave = CommonBo.Base64Encode(ConfigurationManager.AppSettings.Get("ClaveDefecto"));
                 var cambio = new UsuariosBo().ActualizarUsuario(new UsuariosRequest
                 {
                     Usuario = usuario.Usuario

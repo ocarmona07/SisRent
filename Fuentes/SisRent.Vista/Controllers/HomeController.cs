@@ -1,8 +1,4 @@
-﻿using SisRent.Entidades.Request;
-using SisRent.Negocio.Admin;
-using SisRent.Vista.Areas.Mantencion.Models;
-
-namespace SisRent.Vista.Controllers
+﻿namespace SisRent.Vista.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +6,10 @@ namespace SisRent.Vista.Controllers
     using System.Net;
     using System.Net.Mail;
     using System.Web.Mvc;
+    using Entidades.Request;
     using Models;
+    using Negocio.Admin;
+    using Negocio.Common;
 
     public class HomeController : Controller
     {
@@ -56,7 +55,7 @@ namespace SisRent.Vista.Controllers
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult Informacion()
         {
             return View();
@@ -113,13 +112,12 @@ namespace SisRent.Vista.Controllers
                 message = ""
             };
             usuario = usuario.Replace(".", "").Replace("-", "");
-            //clave = Convert.FromBase64String(clave);
             var dataUsuario = new UsuariosBo().ObtenerUsuarioPorRut(new UsuariosRequest
             {
                 RutUsuario = usuario
             });
             if (dataUsuario.EsValido && dataUsuario.Usuario.Estado &&
-                clave.Equals(dataUsuario.Usuario.Clave))
+                clave.Equals(CommonBo.Base64Decode(dataUsuario.Usuario.Clave)))
             {
                 Session["DataUsuario"] = new Areas.Mantencion.Models.ViewModelMapperHelper()
                     .CrearUsuarioModel(dataUsuario.Usuario);
