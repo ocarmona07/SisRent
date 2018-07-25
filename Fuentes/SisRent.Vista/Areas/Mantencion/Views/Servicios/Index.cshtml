@@ -1,6 +1,8 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.ServiciosViewModel
 @{
     ViewBag.Title = "Servicios";
+    ViewBag.Menu = "Servicios";
+    ViewBag.Submenu = "Lista de servicios";
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
 <section class="content-header">
@@ -20,7 +22,7 @@
             <h3 class="box-title">Listado de servicios</h3>
         </div>
         <div class="box-body">
-            <table class="table table-striped">
+            <table id="tblServicios" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Servicio</th>
@@ -103,9 +105,18 @@
     </div>
     @WebControls.ModalAlert("Mensaje Alerta", "")
 </section>
+@section Styles
+{
+    @Styles.Render("~/Styles/datatables")
+}
 @section Scripts
 {
-    <script>
+    @Scripts.Render("~/Scripts/datatables")
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#tblServicios").DataTable();
+        });
+
         $(document).on("click", ".btnEditar", function () {
             $.ajax({
                 url: '@Url.Action("ObtenerServicio", "Servicios", new { area = "Mantencion" })',

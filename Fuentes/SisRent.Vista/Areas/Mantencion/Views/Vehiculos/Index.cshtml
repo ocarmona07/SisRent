@@ -1,6 +1,8 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.VehiculosViewModel
 @{
     ViewBag.Title = "Vehículos";
+    ViewBag.Menu = "Vehículos";
+    ViewBag.Submenu = "Lista de vehículos";
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }
 <section class="content-header">
@@ -20,7 +22,7 @@
             <h3 class="box-title">Listado de vehículos</h3>
         </div>
         <div class="box-body">
-            <table class="table table-striped">
+            <table id="tblVehiculos" class="table table-striped">
                 <thead>
                     <tr>
                         <th style="width: 130px">Imagen</th>
@@ -162,13 +164,16 @@
 @section Styles
 {
     @Styles.Render("~/Styles/select2")
+    @Styles.Render("~/Styles/datatables")
 }
 @section Scripts
 {
     @Scripts.Render("~/Scripts/select2")
-    <script>
+    @Scripts.Render("~/Scripts/datatables")
+    <script type="text/javascript">
         $(document).ready(function() {
             $(".select2").select2();
+            $("#tblVehiculos").DataTable();
         });
 
         $(document).on("click", ".btnEditar", function () {

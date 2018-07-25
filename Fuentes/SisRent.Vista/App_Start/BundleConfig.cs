@@ -59,6 +59,12 @@
 
             bundles.Add(new ScriptBundle("~/Scripts/timepicker").Include(
                       "~/Scripts/bootstrap-timepicker.js"));
+
+            bundles.Add(new StyleBundle("~/Styles/datatables").Include(
+                      "~/Styles/datatables.min.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/datatables").Include(
+                      "~/Scripts/datatables.min.js"));
         }
     }
 }

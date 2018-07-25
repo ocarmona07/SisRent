@@ -200,6 +200,8 @@
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\ct-navbar.js" />
+    <Content Include="Scripts\datatables.js" />
+    <Content Include="Scripts\datatables.min.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -270,6 +272,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Styles\ct-navbar.css" />
+    <Content Include="Styles\datatables.css" />
+    <Content Include="Styles\datatables.min.css" />
     <Content Include="Styles\font-awesome.css" />
     <Content Include="Styles\font-awesome.min.css" />
     <Content Include="Styles\select2.css" />

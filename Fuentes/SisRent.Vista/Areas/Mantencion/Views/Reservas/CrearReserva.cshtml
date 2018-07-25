@@ -1,6 +1,8 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.ReservasViewModel
 @{
     ViewBag.Title = "Crear Reserva";
+    ViewBag.Menu = "Reservas";
+    ViewBag.Submenu = "Crear reserva";
     var listaComunas = Model.ListaComunas;
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
 }

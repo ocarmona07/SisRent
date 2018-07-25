@@ -1,11 +1,5 @@
 ﻿@using SisRent.Vista.Areas.Mantencion.Models
 @{
-    //Validar Inicio
-    if (Session.Keys.Count > 0 && Session["HeaderViewModel"] == null)
-    {
-        Response.Redirect(Url.Action("Index", "Inicio", new {area = "Mantencion"}));
-    }
-
     // *** Preconfigs ***
     var version = System.Configuration.ConfigurationManager.AppSettings.Get("Version");
     const bool light = false; // barra blanca o negra

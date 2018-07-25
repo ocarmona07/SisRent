@@ -1,6 +1,8 @@
 ﻿@model SisRent.Vista.Areas.Mantencion.Models.SidebarViewModel
 @{
     var urlBase = System.Configuration.ConfigurationManager.AppSettings.Get("UrlBase");
+    var isActive = ViewBag.Menu ?? "";
+    var isSubActive = ViewBag.Submenu ?? "";
 }
 <aside class="main-sidebar">
     <section class="sidebar">
@@ -12,7 +14,7 @@
                 {
                     if (acceso.Accesos1.Any())
                     {
-                        <li class="treeview">
+                        <li class="treeview @(isActive == acceso.Acceso ? "menu-open active" : null)">
                             <a href="#">
                                 <i class="fa @("fa-" + acceso.Icono)" title="@acceso.Descripcion"></i>
                                 <span>@acceso.Acceso</span>
@@ -23,8 +25,7 @@
                             <ul class="treeview-menu">
                                 @foreach (var accesoHijo in acceso.Accesos1)
                                 {
-
-                                    <li>
+                                    <li @(isSubActive == accesoHijo.Acceso ? " class=active" : null)>
                                         <a href="@(urlBase + accesoHijo.UrlAcceso)" title="@accesoHijo.Descripcion">
                                             <i class="fa @("fa-" + accesoHijo.Icono)"></i> @accesoHijo.Acceso
                                         </a>
@@ -35,7 +36,7 @@
                     }
                     else
                     {
-                        <li>
+                        <li @(isActive == acceso.Acceso ? " class=active" : null)>
                             <a href="@(urlBase + acceso.UrlAcceso)" title="@acceso.Descripcion">
                                 <i class="fa @("fa-" + acceso.Icono)"></i> <span>@acceso.Acceso</span>
                             </a>
