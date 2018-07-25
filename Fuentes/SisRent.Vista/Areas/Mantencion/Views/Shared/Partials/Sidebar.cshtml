@@ -15,9 +15,8 @@
                     if (acceso.Accesos1.Any())
                     {
                         <li class="treeview @(isActive == acceso.Acceso ? "menu-open active" : null)">
-                            <a href="#">
-                                <i class="fa @("fa-" + acceso.Icono)" title="@acceso.Descripcion"></i>
-                                <span>@acceso.Acceso</span>
+                            <a href="#" title="@acceso.Descripcion">
+                                <i class="fa @("fa-" + acceso.Icono)"></i> <span>@acceso.Acceso</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>

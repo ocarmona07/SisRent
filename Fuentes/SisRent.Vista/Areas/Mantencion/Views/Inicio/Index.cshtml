@@ -17,39 +17,59 @@
 <section class="content">
     <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa fa-key"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Reservas</span>
-                    <span class="info-box-number">@Model.Reservas</span>
+            <div class="small-box bg-red">
+                <div class="inner">
+                    <p>Reservas</p>
+                    <h3>@Model.Reservas</h3>
                 </div>
+                <div class="icon">
+                    <i class="fa fa-tags"></i>
+                </div>
+                <a href="@Url.Action("Index", "Reservas", new { area = "Mantencion" })" class="small-box-footer">
+                    Ver listado <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="fa fa-car"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Vehículos</span>
-                    <span class="info-box-number">@Model.Vehiculos</span>
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                    <p>Vehículos</p>
+                    <h3>@Model.Vehiculos</h3>
                 </div>
+                <div class="icon">
+                    <i class="fa fa-car"></i>
+                </div>
+                <a href="@Url.Action("Index", "Vehiculos", new { area = "Mantencion" })" class="small-box-footer">
+                    Ver listado <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-green"><i class="fa fa-shopping-cart"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Servicios</span>
-                    <span class="info-box-number">@Model.Servicios</span>
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <p>Servicios</p>
+                    <h3>@Model.Servicios</h3>
                 </div>
+                <div class="icon">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <a href="@Url.Action("Index", "Servicios", new { area = "Mantencion" })" class="small-box-footer">
+                    Ver listado <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-yellow"><i class="fa fa-users"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Usuarios</span>
-                    <span class="info-box-number">@Model.Usuarios</span>
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <p>Usuarios</p>
+                    <h3>@Model.Usuarios</h3>
                 </div>
+                <div class="icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <a href="@Url.Action("Index", "Usuarios", new { area = "Mantencion" })" class="small-box-footer">
+                    Ver listado <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div>
         </div>
     </div>
